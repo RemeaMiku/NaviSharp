@@ -1,0 +1,32 @@
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.exe
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.deps.json
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.runtimeconfig.json
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.dll
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.pdb
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.csproj.AssemblyReference.cache
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.AssemblyInfoInputs.cache
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.AssemblyInfo.cs
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.csproj.CoreCompileInputs.cache
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.dll
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\refint\NaviSharp.dll
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.pdb
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.genruntimeconfig.cache
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\ref\NaviSharp.dll
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\MathNet.Numerics.dll
+D:\RemeaMiku study\结束课程\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.csproj.CopyComplete
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.exe
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.deps.json
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.runtimeconfig.json
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.dll
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net6.0\NaviSharp.pdb
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.csproj.AssemblyReference.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.AssemblyInfoInputs.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.AssemblyInfo.cs
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.csproj.CoreCompileInputs.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.dll
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\refint\NaviSharp.dll
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.pdb
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\NaviSharp.genruntimeconfig.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net6.0\ref\NaviSharp.dll

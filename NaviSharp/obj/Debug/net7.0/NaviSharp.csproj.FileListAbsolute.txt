@@ -1,0 +1,12 @@
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net7.0\NaviSharp.deps.json
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net7.0\NaviSharp.dll
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\bin\Debug\net7.0\NaviSharp.pdb
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.csproj.AssemblyReference.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.AssemblyInfoInputs.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.AssemblyInfo.cs
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.csproj.CoreCompileInputs.cache
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.dll
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\refint\NaviSharp.dll
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\NaviSharp.pdb
+D:\RemeaMiku study\finished course\网络程序设计\Csharp\NaviSharp\NaviSharp\obj\Debug\net7.0\ref\NaviSharp.dll
