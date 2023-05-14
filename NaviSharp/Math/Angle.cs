@@ -124,6 +124,12 @@ public partial struct Angle :
     public static bool operator >(Angle left, Angle right)
         => left._radians > right._radians;
 
+    public static bool operator >=(Angle left, Angle right)
+        => left._radians >= right._radians;
+
+    public static bool operator <=(Angle left, Angle right)
+        => left._radians <= right._radians;
+
     public static double Sec(Angle angle)
         => 1 / Cos(angle);
 
@@ -136,15 +142,17 @@ public partial struct Angle :
     public static double Tan(Angle angle)
         => Math.Tan(angle._radians);
 
-    public Angle Clamp(Angle min, Angle max)
+    public void Clamp(Angle min, Angle max)
     {
         if (min > max)
-            throw new ArgumentException("The specified range is not legal");
-        var radians = _radians;
-        radians = IEEERemainder(radians -= min._radians, max._radians - min._radians);
-        if (radians > 0) radians += min._radians;
-        else radians += max._radians;
-        return new(radians);
+            throw new ArgumentException($"{min} can't be greater than {max}");
+        _radians = Math.Clamp(_radians, min._radians, max._radians);
+    }
+
+    public static Angle Clamp(Angle angle, Angle min, Angle max)
+    {
+        angle.Clamp(min, max);
+        return angle;
     }
 
     public int CompareTo(Angle other)

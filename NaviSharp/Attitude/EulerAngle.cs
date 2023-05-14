@@ -17,16 +17,24 @@ public readonly partial record struct EulerAngle : IFormattable
 
     public EulerAngle(double yaw, double pitch, double roll)
     {
-        Yaw = new Angle(yaw).Clamp(ZeroAngle, RoundAngle);
-        Pitch = new Angle(pitch).Clamp(-RightAngle, RightAngle);
-        Roll = new Angle(roll).Clamp(-StraightAngle, StraightAngle);
+        Yaw = new(yaw);
+        Pitch = new(pitch);
+        Roll = new(roll);
+        Clamp();
     }
 
     public EulerAngle(Angle yaw, Angle pitch, Angle roll)
     {
-        Yaw = yaw.Clamp(ZeroAngle, RoundAngle);
-        Pitch = pitch.Clamp(-RightAngle, RightAngle);
-        Roll = roll.Clamp(-StraightAngle, StraightAngle);
+        Yaw = yaw;
+        Pitch = pitch;
+        Roll = roll;
+        Clamp();
+    }
+    private void Clamp()
+    {
+        Yaw.Clamp(ZeroAngle, RoundAngle);
+        Pitch.Clamp(-RightAngle, RightAngle);
+        Roll.Clamp(-StraightAngle, StraightAngle);
     }
     public override string ToString()
         => $"[Yaw:{Yaw},Pitch:{Pitch},Roll:{Roll}]";

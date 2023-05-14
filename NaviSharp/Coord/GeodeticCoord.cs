@@ -16,17 +16,24 @@ public readonly partial record struct GeodeticCoord : IFormattable
     }
     public GeodeticCoord(double latitude, double longitude, double height)
     {
-        Latitude = new Angle(latitude).Clamp(-RightAngle, RightAngle);
-        Longitude = new Angle(longitude).Clamp(-StraightAngle, StraightAngle);
+        Latitude = new(latitude);
+        Longitude = new(longitude);
         Height = height;
+        Clamp();
     }
     public GeodeticCoord(Angle latitude, Angle longitude, double height)
     {
-        Latitude = latitude.Clamp(-RightAngle, RightAngle); ;
-        Longitude = longitude.Clamp(-StraightAngle, StraightAngle);
+        Latitude = latitude; ;
+        Longitude = longitude;
         Height = height;
+        Clamp();
     }
 
+    private void Clamp()
+    {
+        Latitude.Clamp(-RightAngle, RightAngle);
+        Longitude.Clamp(-StraightAngle, StraightAngle);
+    }
     public override string ToString()
         => $"[Lat:{Latitude},Lon:{Longitude},Hgt{Height}]";
     /// <summary>
