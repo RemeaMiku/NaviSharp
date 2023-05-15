@@ -24,7 +24,7 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
         Sow = second;
     }
 
-    public static UtcTime StartPointAsUtcTime { get; } = new(1980, 1, 6, 0, 0, 0, new());
+    public static UtcTime StartPointAsUtcTime { get; } = new(1980, 1, 6, 0, 0, 0, TimeSpan.Zero);
 
     public static GpsTime Now => FromUtc(UtcTime.Now);
 
@@ -64,6 +64,6 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
     public static UtcTime ToUtc(GpsTime gpsTime)
     {
         var totalSeconds = gpsTime.SecondsSinceEpoch - LeapSecond.GetLeapSeconds(gpsTime) + _startPointLeapSeconds;
-        return StartPointAsUtcTime.AddSeconds(totalSeconds);
+        return StartPointAsUtcTime.AddSeconds(totalSeconds).ToOffset(TimeZoneInfo.Local.BaseUtcOffset);
     }
 }
