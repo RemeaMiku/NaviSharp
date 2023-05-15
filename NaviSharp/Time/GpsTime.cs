@@ -38,7 +38,7 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
         => new(left.SecondsSinceEpoch + right.TotalSeconds);
 
     public static TimeSpan operator -(GpsTime left, GpsTime right)
-        => new((long)((left.SecondsSinceEpoch - right.SecondsSinceEpoch) * 10000000));
+        => TimeSpan.FromSeconds(left.SecondsSinceEpoch - right.SecondsSinceEpoch);
 
     public static bool operator >(GpsTime left, GpsTime right)
         => left.CompareTo(right) > 0;

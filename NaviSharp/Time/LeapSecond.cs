@@ -3,7 +3,7 @@
 
 namespace NaviSharp;
 
-public static class LeapSecond
+internal static class LeapSecond
 {
     #region Public Methods
 
