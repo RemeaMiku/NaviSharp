@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿// RemeaMiku(Wuhan University)
+//  Email:2020302142257@whu.edu.cn
+
+using System.Collections;
 using System.Numerics;
 
 namespace NaviSharp;

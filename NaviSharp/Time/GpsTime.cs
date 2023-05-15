@@ -1,15 +1,16 @@
-﻿using System.Numerics;
+﻿// RemeaMiku(Wuhan University)
+//  Email:2020302142257@whu.edu.cn
+
+using System.Numerics;
 
 namespace NaviSharp;
 
-public readonly record struct GpsTime : IComparable<GpsTime>, IAdditionOperators<GpsTime, TimeSpan, GpsTime>, ISubtractionOperators<GpsTime, GpsTime, TimeSpan>, IEquatable<GpsTime>
+public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionOperators<GpsTime, TimeSpan, GpsTime>, ISubtractionOperators<GpsTime, GpsTime, TimeSpan>, IEquatable<GpsTime>
 {
     public ushort Week { get; init; }
     public double Sow { get; init; }
-    public TimeSpan TimeSpanSinceEpoch => TimeSpan.FromSeconds(SecondsSinceEpoch);
-
     public double SecondsSinceEpoch => Week * SecondsPerWeek + Sow;
-    public UtcTime Utc => StartPointAsUtcTime.AddSeconds(SecondsSinceEpoch);
+    public UtcTime Utc => ToUtc(this);
     public GpsTime(double secondsSinceEpoch)
     {
         Week = (ushort)(secondsSinceEpoch / SecondsPerWeek);
@@ -23,23 +24,9 @@ public readonly record struct GpsTime : IComparable<GpsTime>, IAdditionOperators
         Sow = second;
     }
 
-    public GpsTime(TimeSpan timeSpan)
-    {
-        var second = timeSpan.TotalSeconds;
-        Week = (ushort)(second / SecondsPerWeek);
-        Sow = second - Week * SecondsPerWeek;
-    }
-
-    public GpsTime(UtcTime utcTime)
-    {
-        var second = (utcTime - StartPointAsUtcTime).TotalSeconds;
-        Week = (ushort)(second / SecondsPerWeek);
-        Sow = second - Week * SecondsPerWeek;
-    }
-
     public static UtcTime StartPointAsUtcTime { get; } = new(1980, 1, 6, 0, 0, 0, new());
 
-    public static GpsTime Now => new(UtcTime.UtcNow);
+    public static GpsTime Now => FromUtc(UtcTime.Now);
 
     public int CompareTo(GpsTime other)
     {
@@ -62,4 +49,21 @@ public readonly record struct GpsTime : IComparable<GpsTime>, IAdditionOperators
         => left.CompareTo(right) >= 0;
     public static bool operator <=(GpsTime left, GpsTime right)
         => left.CompareTo(right) <= 0;
+
+    private const ushort _startPointLeapSeconds = 9;
+    public static GpsTime FromUtc(UtcTime utcTime)
+    {
+        var totalSeconds = (utcTime - StartPointAsUtcTime).TotalSeconds
+            + LeapSecond.GetLeapSeconds(utcTime)
+            - _startPointLeapSeconds;
+        var week = (ushort)(totalSeconds / SecondsPerWeek);
+        var sow = totalSeconds - week * SecondsPerWeek;
+        return new(week, sow);
+    }
+
+    public static UtcTime ToUtc(GpsTime gpsTime)
+    {
+        var totalSeconds = gpsTime.SecondsSinceEpoch - LeapSecond.GetLeapSeconds(gpsTime) + _startPointLeapSeconds;
+        return StartPointAsUtcTime.AddSeconds(totalSeconds);
+    }
 }

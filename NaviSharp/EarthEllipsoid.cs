@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿// RemeaMiku(Wuhan University)
+//  Email:2020302142257@whu.edu.cn
+
+using System.Numerics;
 
 namespace NaviSharp;
 
@@ -124,6 +127,14 @@ public readonly partial struct EarthEllipsoid : IEquatable<EarthEllipsoid>, IEqu
     public bool Equals(EarthEllipsoid other)
         => A == other.A && B == other.B;
 
+    public override bool Equals(object? obj)
+        => obj is EarthEllipsoid ellipsoid && Equals(ellipsoid);
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
+
     private static (double B, double E2) GetBWithE2(double a, double e1)
     {
         var b = a * a * (1 - e1 * e1);
@@ -139,13 +150,5 @@ public readonly partial struct EarthEllipsoid : IEquatable<EarthEllipsoid>, IEqu
 
     private static double GetOblateness(double a, double b)
         => (a - b) / a;
-
-    public override bool Equals(object? obj)
-        => obj is EarthEllipsoid ellipsoid && Equals(ellipsoid);
-
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
     #endregion Private Methods
 }

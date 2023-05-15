@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿// RemeaMiku(Wuhan University)
+//  Email:2020302142257@whu.edu.cn
+
+using System.Numerics;
 
 namespace NaviSharp;
 
@@ -60,12 +63,6 @@ public partial struct Angle :
 
     public static Angle AddRads(Angle angle, double radians)
     => new(angle._radians + radians);
-
-    public void AddDegrees(double degrees)
-    => _radians += degrees * RadiansPerDegree;
-
-    public void AddRadians(double radians)
-    => _radians += radians;
 
     public static double Cos(Angle angle)
         => Math.Cos(angle._radians);
@@ -142,19 +139,23 @@ public partial struct Angle :
     public static double Tan(Angle angle)
         => Math.Tan(angle._radians);
 
-    public void Clamp(Angle min, Angle max)
-    {
-        if (min > max)
-            throw new ArgumentException($"{min} can't be greater than {max}");
-        _radians = Math.Clamp(_radians, min._radians, max._radians);
-    }
-
     public static Angle Clamp(Angle angle, Angle min, Angle max)
     {
         angle.Clamp(min, max);
         return angle;
     }
 
+    public void AddDegrees(double degrees)
+                                                                                                            => _radians += degrees * RadiansPerDegree;
+
+    public void AddRadians(double radians)
+    => _radians += radians;
+    public void Clamp(Angle min, Angle max)
+    {
+        if (min > max)
+            throw new ArgumentException($"{min} can't be greater than {max}");
+        _radians = Math.Clamp(_radians, min._radians, max._radians);
+    }
     public int CompareTo(Angle other)
             => _radians.CompareTo(other._radians);
 

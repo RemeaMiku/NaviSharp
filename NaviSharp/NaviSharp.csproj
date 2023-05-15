@@ -10,4 +10,12 @@
     <Company>Wuhan University</Company>
   </PropertyGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\RemeaMiku study\course in progress\dotnet\NaviSharp\NaviSharp\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\RemeaMiku study\course in progress\dotnet\NaviSharp\NaviSharp\.editorconfig" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,7 @@
-﻿namespace NaviSharp;
+﻿// RemeaMiku(Wuhan University)
+//  Email:2020302142257@whu.edu.cn
+
+namespace NaviSharp;
 
 public partial struct EarthEllipsoid
 {

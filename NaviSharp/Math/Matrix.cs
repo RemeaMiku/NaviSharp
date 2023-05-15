@@ -1,4 +1,7 @@
-﻿using System.Collections.Concurrent;
+﻿// RemeaMiku(Wuhan University)
+//  Email:2020302142257@whu.edu.cn
+
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Text;
 
