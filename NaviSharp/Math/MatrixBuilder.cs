@@ -14,6 +14,30 @@ public partial class Matrix<T>
 {
     #region Public Methods
 
+    public static Matrix<T> FromVectorsAsRows(params Vector<T>[] vectors)
+    {
+        var column = vectors[0].Dimension;
+        if (!vectors.All(vector => vector.Dimension == column))
+            throw new ArgumentException("The vectors in the array must have the same dimension.");
+        var matrix = new Matrix<T>(vectors.Length, column);
+        for (var i = 0; i < matrix.RowCount; i++)
+            for (var j = 0; j < matrix.ColumnCount; j++)
+                matrix.At(i, j, vectors[i].At(j));
+        return matrix;
+    }
+
+    public static Matrix<T> FromVectorsAsColumns(params Vector<T>[] vectors)
+    {
+        var row = vectors[0].Dimension;
+        if (!vectors.All(vector => vector.Dimension == row))
+            throw new ArgumentException("The vectors in the array must have the same dimension");
+        var matrix = new Matrix<T>(row, vectors.Length);
+        for (var i = 0; i < matrix.RowCount; i++)
+            for (var j = 0; j < matrix.ColumnCount; j++)
+                matrix.At(i, j, vectors[j].At(i));
+        return matrix;
+    }
+
     public static Matrix<T> Combine(Matrix<T> matrix1, Matrix<T> matrix2, MatrixCombinationMode mode = MatrixCombinationMode.Horizontal)
     {
         switch (mode)

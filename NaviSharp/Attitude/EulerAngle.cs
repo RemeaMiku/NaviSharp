@@ -23,7 +23,7 @@ public readonly partial record struct EulerAngle : IFormattable
         Yaw = new(yaw);
         Pitch = new(pitch);
         Roll = new(roll);
-        Clamp();
+        ValidateRange();
     }
 
     public EulerAngle(Angle yaw, Angle pitch, Angle roll)
@@ -31,14 +31,19 @@ public readonly partial record struct EulerAngle : IFormattable
         Yaw = yaw;
         Pitch = pitch;
         Roll = roll;
-        Clamp();
+        ValidateRange();
     }
-    private void Clamp()
+
+    private void ValidateRange()
     {
-        Yaw.Clamp(ZeroAngle, RoundAngle);
-        Pitch.Clamp(-RightAngle, RightAngle);
-        Roll.Clamp(-StraightAngle, StraightAngle);
+        if (Yaw <= -StraightAngle || Yaw > StraightAngle)
+            throw new ArgumentException($"{nameof(Yaw)} must be in the range of (-180°,180°]");
+        if (Pitch < -RightAngle || Pitch > RightAngle)
+            throw new ArgumentException($"{nameof(Pitch)} must be in the range of [-90°,90°]");
+        if (Roll <= -StraightAngle || Roll > StraightAngle)
+            throw new ArgumentException($"{nameof(Roll)} must be in the range of (-180°,180°]");
     }
+
     public override string ToString()
         => $"[Yaw:{Yaw},Pitch:{Pitch},Roll:{Roll}]";
 

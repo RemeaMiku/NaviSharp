@@ -7,28 +7,28 @@ public readonly partial record struct GeodeticCoord : IFormattable
 {
     public Angle Latitude { get; init; }
     public Angle Longitude { get; init; }
-    public double Height { get; init; }
+    public double Altitude { get; init; }
     public double B => Latitude.Radians;
     public double L => Longitude.Radians;
-    public double H => Height;
+    public double H => Altitude;
     public GeodeticCoord()
     {
         Latitude = ZeroAngle;
         Longitude = ZeroAngle;
-        Height = 0;
+        Altitude = 0;
     }
     public GeodeticCoord(double latitude, double longitude, double height)
     {
         Latitude = new(latitude);
         Longitude = new(longitude);
-        Height = height;
+        Altitude = height;
         Clamp();
     }
     public GeodeticCoord(Angle latitude, Angle longitude, double height)
     {
         Latitude = latitude; ;
         Longitude = longitude;
-        Height = height;
+        Altitude = height;
         Clamp();
     }
 
@@ -38,7 +38,7 @@ public readonly partial record struct GeodeticCoord : IFormattable
         Longitude.Clamp(-StraightAngle, StraightAngle);
     }
     public override string ToString()
-        => $"[Lat:{Latitude},Lon:{Longitude},Hgt{Height}]";
+        => $"[Lat:{Latitude},Lon:{Longitude},Hgt{Altitude}]";
     /// <summary>
     /// Converts this to a formatted string.
     /// </summary>
@@ -66,8 +66,8 @@ public readonly partial record struct GeodeticCoord : IFormattable
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
         if (format == "deg" || format == "rad" || format == "dms")
-            return $"[Lat:{Latitude.ToString(format, formatProvider)},Lon:{Longitude.ToString(format, formatProvider)},Hgt:{Height.ToString(formatProvider)}]";
-        return $"[Lat:{Latitude.ToString(format, formatProvider)},Lon:{Longitude.ToString(format, formatProvider)},Hgt:{Height.ToString(format, formatProvider)}]";
+            return $"[Lat:{Latitude.ToString(format, formatProvider)},Lon:{Longitude.ToString(format, formatProvider)},Hgt:{Altitude.ToString(formatProvider)}]";
+        return $"[Lat:{Latitude.ToString(format, formatProvider)},Lon:{Longitude.ToString(format, formatProvider)},Hgt:{Altitude.ToString(format, formatProvider)}]";
     }
 
 }

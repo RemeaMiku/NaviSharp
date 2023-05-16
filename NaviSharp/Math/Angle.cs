@@ -145,11 +145,9 @@ public partial struct Angle :
         return angle;
     }
 
-    public void AddDegrees(double degrees)
-                                                                                                            => _radians += degrees * RadiansPerDegree;
+    public void AddDegrees(double degrees) => _radians += degrees * RadiansPerDegree;
 
-    public void AddRadians(double radians)
-    => _radians += radians;
+    public void AddRadians(double radians) => _radians += radians;
     public void Clamp(Angle min, Angle max)
     {
         if (min > max)

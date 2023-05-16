@@ -63,12 +63,12 @@ public partial record struct GeodeticCoord
     public CartesianCoord ToCart(EarthEllipsoid e)
     {
         double n = e.N(Latitude);
-        double temp = (n + Height) * Cos(Latitude);
-        return new CartesianCoord(temp * Cos(Longitude), temp * Sin(Longitude), (n * (1 - e.E1 * e.E1) + Height) * Sin(Latitude));
+        double temp = (n + Altitude) * Cos(Latitude);
+        return new CartesianCoord(temp * Cos(Longitude), temp * Sin(Longitude), (n * (1 - e.E1 * e.E1) + Altitude) * Sin(Latitude));
     }
 
     public double[] ToArray() => (double[])this;
-    public Vector<double> ToVector() => new(new double[] { Latitude.Radians, Longitude.Radians, Height });
+    public Vector<double> ToVector() => new(new double[] { Latitude.Radians, Longitude.Radians, Altitude });
     public static GeodeticCoord FromCart(CartesianCoord coord, EarthEllipsoid e) => coord.ToGeo(e);
     public static GeodeticCoord FromVector(Vector<double> vector)
     {
@@ -78,8 +78,8 @@ public partial record struct GeodeticCoord
     }
 
     public static explicit operator double[](GeodeticCoord coord)
-        => new double[] { coord.Latitude.Radians, coord.Longitude.Radians, coord.Height };
+        => new double[] { coord.Latitude.Radians, coord.Longitude.Radians, coord.Altitude };
 
     public static explicit operator Vector<double>(GeodeticCoord coord)
-    => new(new double[] { coord.Latitude.Radians, coord.Longitude.Radians, coord.Height });
+    => new(new double[] { coord.Latitude.Radians, coord.Longitude.Radians, coord.Altitude });
 }
