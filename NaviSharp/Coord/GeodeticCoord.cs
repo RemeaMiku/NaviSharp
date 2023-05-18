@@ -17,28 +17,33 @@ public readonly partial record struct GeodeticCoord : IFormattable
         Longitude = ZeroAngle;
         Altitude = 0;
     }
-    public GeodeticCoord(double latitude, double longitude, double height)
+    public GeodeticCoord(double latitude, double longitude, double altitude)
     {
         Latitude = new(latitude);
         Longitude = new(longitude);
-        Altitude = height;
-        Clamp();
+        Altitude = altitude;
+        ValidateRange();
     }
-    public GeodeticCoord(Angle latitude, Angle longitude, double height)
+    public GeodeticCoord(Angle latitude, Angle longitude, double altitude)
     {
         Latitude = latitude; ;
         Longitude = longitude;
-        Altitude = height;
-        Clamp();
+        Altitude = altitude;
+        ValidateRange();
     }
 
-    private void Clamp()
+    public void Deconstruct(out Angle latitude, out Angle longitude, out double altitude)
+        => (latitude, longitude, altitude) = (Latitude, Longitude, Altitude);
+
+    private void ValidateRange()
     {
-        Latitude.Clamp(-RightAngle, RightAngle);
-        Longitude.Clamp(-StraightAngle, StraightAngle);
+        if (Latitude < -RightAngle || Latitude > RightAngle)
+            throw new ArgumentException($"{nameof(Latitude)} must be in the range of [-90°,90°]");
+        if (Longitude <= -StraightAngle || Longitude > StraightAngle)
+            throw new ArgumentException($"{nameof(Longitude)} must be in the range of (-180°,180°]");
     }
     public override string ToString()
-        => $"[Lat:{Latitude},Lon:{Longitude},Hgt{Altitude}]";
+        => $"[Lat:{Latitude},Lon:{Longitude},Hgt:{Altitude}]";
     /// <summary>
     /// Converts this to a formatted string.
     /// </summary>

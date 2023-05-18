@@ -10,6 +10,9 @@ public partial record struct CartesianCoord : IFormattable, IEquatable<Cartesian
     public double X { get; set; }
     public double Y { get; set; }
     public double Z { get; set; }
+
+    public void Deconstruct(out double x, out double y, out double z)
+    => (x, y, z) = (X, Y, Z);
     public CartesianCoord(double x, double y, double z)
     {
         X = x;

@@ -7,6 +7,21 @@ namespace NaviSharp;
 
 public partial record struct EulerAngle
 {
+    public Matrix<T> ToRotationMatrix<T>() where T : struct, IFloatingPoint<T>
+    {
+        var sinPsi = Sin(Yaw);
+        var cosPsi = Cos(Yaw);
+        var sinTheta = Sin(Pitch);
+        var cosTheta = Cos(Pitch);
+        var sinPhi = Sin(Roll);
+        var cosPhi = Cos(Roll);
+        return new(new T[,]
+        {
+            {(dynamic)cosTheta*cosPsi,-(dynamic)cosPhi*sinPsi+sinPhi*sinTheta*cosPsi,(dynamic)sinPhi*sinPsi+cosPhi*sinTheta*cosPsi},
+            {(dynamic)cosTheta*sinPsi,(dynamic)cosPhi*cosPsi+sinPhi*sinTheta*sinPsi,-(dynamic)sinPhi*cosPsi+cosPhi*sinTheta*sinPsi },
+            {-(dynamic)sinTheta,(dynamic)sinPhi*cosTheta,(dynamic)cosPhi*cosTheta }
+        });
+    }
     public Quaternion<T> ToQuaternion<T>() where T : struct, IFloatingPoint<T>
     {
         var sinpsi2 = Sin(Yaw / 2);

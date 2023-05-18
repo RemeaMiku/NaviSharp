@@ -16,7 +16,7 @@ public partial struct Angle :
 {
     #region Public Constructors
 
-    public Angle(double radians) => _radians = radians;
+    public Angle(double radians) => Radians = radians;
 
     public Angle(int degrees, byte minutes, double seconds)
         => DegreesMinutesSeconds = (degrees, minutes, seconds);
@@ -27,8 +27,8 @@ public partial struct Angle :
 
     public double Degrees
     {
-        get => DegreesPerRadian * _radians;
-        set => _radians = value * RadiansPerDegree;
+        get => DegreesPerRadian * Radians;
+        set => Radians = value * RadiansPerDegree;
     }
 
     public (int Degrees, byte Minutes, double Seconds) DegreesMinutesSeconds
@@ -48,27 +48,44 @@ public partial struct Angle :
         }
     }
 
-    public double Radians
-    {
-        get => _radians;
-        set => _radians = value;
-    }
-
+    public double Radians { get; set; }
     #endregion Public Properties
 
     #region Public Methods
 
+    public enum AngleRange
+    {
+        ZeroToRound,
+        NegativeStraightToStraight
+    }
+
+    public static Angle Map(Angle angle, AngleRange range = AngleRange.ZeroToRound)
+    {
+        angle.Radians = IEEERemainder(angle.Radians, DoublePI);
+        if (angle < ZeroAngle)
+            angle += RoundAngle;
+        if (range == AngleRange.NegativeStraightToStraight && angle > StraightAngle)
+            angle -= RoundAngle;
+        return angle;
+    }
+
+    public void Deconstruct(out int degrees, out byte minutes, out double seconds)
+    {
+        var totalSeconds = 3600M * (decimal)Degrees;
+        (degrees, minutes, seconds) = ((int)Abs(totalSeconds % 60M), (byte)Abs(totalSeconds / 60M % 60M), (double)(totalSeconds / 3600M));
+    }
+
     public static Angle AddDegrees(Angle angle, double degrees)
-    => new(angle._radians + degrees * RadiansPerDegree);
+    => new(angle.Radians + degrees * RadiansPerDegree);
 
     public static Angle AddRads(Angle angle, double radians)
-    => new(angle._radians + radians);
+    => new(angle.Radians + radians);
 
     public static double Cos(Angle angle)
-        => Math.Cos(angle._radians);
+        => Math.Cos(angle.Radians);
 
     public static double Cot(Angle angle)
-        => Math.Tan(PI / 2 - angle._radians);
+        => Math.Tan(PI / 2 - angle.Radians);
 
     public static double Cot(double radians)
         => Math.Tan(PI / 2 - radians);
@@ -92,40 +109,40 @@ public partial struct Angle :
         => new(radians);
 
     public static Angle operator -(Angle left, Angle right)
-        => new(left._radians - right._radians);
+        => new(left.Radians - right.Radians);
 
     public static Angle operator -(Angle angle)
-        => new(-angle._radians);
+        => new(-angle.Radians);
 
     public static bool operator !=(Angle left, Angle right)
         => !(left == right);
 
     public static Angle operator *(double num, Angle angle)
-        => new(angle._radians * num);
+        => new(angle.Radians * num);
 
     public static Angle operator *(Angle angle, double num)
-        => new(angle._radians * num);
+        => new(angle.Radians * num);
 
     public static Angle operator /(Angle angle, double num)
-        => new(angle._radians / num);
+        => new(angle.Radians / num);
 
     public static Angle operator +(Angle left, Angle right)
-        => new(left._radians + right._radians);
+        => new(left.Radians + right.Radians);
 
     public static bool operator <(Angle left, Angle right)
-        => left._radians < right._radians;
+        => left.Radians < right.Radians;
 
     public static bool operator ==(Angle left, Angle right)
         => left.Equals(right);
 
     public static bool operator >(Angle left, Angle right)
-        => left._radians > right._radians;
+        => left.Radians > right.Radians;
 
     public static bool operator >=(Angle left, Angle right)
-        => left._radians >= right._radians;
+        => left.Radians >= right.Radians;
 
     public static bool operator <=(Angle left, Angle right)
-        => left._radians <= right._radians;
+        => left.Radians <= right.Radians;
 
     public static double Sec(Angle angle)
         => 1 / Cos(angle);
@@ -134,37 +151,33 @@ public partial struct Angle :
         => 1 / Math.Cos(radians);
 
     public static double Sin(Angle angle)
-        => Math.Sin(angle._radians);
+        => Math.Sin(angle.Radians);
 
     public static double Tan(Angle angle)
-        => Math.Tan(angle._radians);
+        => Math.Tan(angle.Radians);
 
     public static Angle Clamp(Angle angle, Angle min, Angle max)
     {
-        angle.Clamp(min, max);
-        return angle;
-    }
-
-    public void AddDegrees(double degrees) => _radians += degrees * RadiansPerDegree;
-
-    public void AddRadians(double radians) => _radians += radians;
-    public void Clamp(Angle min, Angle max)
-    {
         if (min > max)
-            throw new ArgumentException($"{min} can't be greater than {max}");
-        _radians = Math.Clamp(_radians, min._radians, max._radians);
+            throw new ArgumentOutOfRangeException($"{nameof(min)}({min.Degrees}deg) can't be greater than {nameof(max)}({max.Degrees}deg).");
+        return new(Math.Clamp(angle.Radians, min.Radians, max.Radians));
     }
+
+    public void AddDegrees(double degrees) => Radians += degrees * RadiansPerDegree;
+
+    public void AddRadians(double radians) => Radians += radians;
+
     public int CompareTo(Angle other)
-            => _radians.CompareTo(other._radians);
+            => Radians.CompareTo(other.Radians);
 
     public bool Equals(Angle other)
-        => _radians == other._radians;
+        => Radians == other.Radians;
 
     public override bool Equals(object? obj)
         => obj is Angle angle && Equals(angle);
 
     public override int GetHashCode()
-        => _radians.GetHashCode();
+        => Radians.GetHashCode();
 
     public override string ToString()
         => $"{Degrees}deg";
@@ -238,9 +251,4 @@ public partial struct Angle :
 
     #endregion Public Methods
 
-    #region Private Fields
-
-    private double _radians;
-
-    #endregion Private Fields
 }
