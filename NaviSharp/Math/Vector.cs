@@ -2,6 +2,7 @@
 //  Email:2020302142257@whu.edu.cn
 
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace NaviSharp;
 
@@ -66,6 +67,34 @@ public partial class Vector<T> :
         }
     }
 
+    public T this[Index index]
+    {
+        get
+        {
+            var i = index.IsFromEnd ? Dimension - index.Value : index.Value;
+            return this[i];
+        }
+        set
+        {
+            var i = index.IsFromEnd ? Dimension - index.Value : index.Value;
+            this[i] = value;
+        }
+    }
+
+    public Vector<T> this[Range range]
+    {
+        get
+        {
+            var (start, count) = range.GetOffsetAndLength(Dimension);
+            return SubVector(start, count);
+        }
+        set
+        {
+            var (start, count) = range.GetOffsetAndLength(Dimension);
+            SetRange(value, 0, start, count);
+        }
+    }
+
     #endregion Public Indexers
 
     #region Public Methods
@@ -116,9 +145,10 @@ public partial class Vector<T> :
         return _data[i];
     }
 
-    public void At(int i, T num)
+    public Vector<T> At(int i, T num)
     {
         _data[i] = num;
+        return this;
     }
 
     public Vector<T> Combine(Vector<T> other) => Vector<T>.FromVectorArray(this, other);
@@ -168,11 +198,23 @@ public partial class Vector<T> :
         return new Vector<T>(new T[] { At(1) * other.At(2) - At(2) * other.At(1), At(2) * other.At(0) - At(0) * other.At(2), At(0) * other.At(1) - At(1) * other.At(0) });
     }
 
-    public void SetRange(T[] sourceArray, int sourceIndex, int vectorIndex, int count)
+    public Vector<T> SetRange(T[] sourceArray, int sourceIndex, int vectorIndex, int count)
     {
         ValidateRange(vectorIndex);
         ValidateRange(vectorIndex + count - 1);
         Array.Copy(sourceArray, sourceIndex, _data, vectorIndex, count);
+        return this;
+    }
+
+    public Vector<T> SetRange(Vector<T> sourceVector, int sourceIndex, int vectorIndex, int count)
+    {
+        ValidateRange(vectorIndex);
+        ValidateRange(vectorIndex + count - 1);
+        sourceVector.ValidateRange(sourceIndex);
+        sourceVector.ValidateRange(sourceIndex + count - 1);
+        for (int i = 0; i < count; i++)
+            At(vectorIndex + i, sourceVector.At(sourceIndex + i));
+        return this;
     }
 
     public Vector<T> SubVector(int startIndex, int count)
@@ -207,14 +249,21 @@ public partial class Vector<T> :
         return this / Norm();
     }
 
+    public Vector<T> Unitize()
+    {
+        var num = T.One / Norm();
+        DoMult(num, _data, _data);
+        return this;
+    }
+
     #endregion Public Methods
 
     #region Private Methods
 
-    private void ValidateRange(int i)
+    private void ValidateRange(int i, [CallerArgumentExpression(nameof(i))] string? nameOfI = null)
     {
         if (i < 0 || i >= Dimension)
-            throw new ArgumentOutOfRangeException(nameof(i));
+            throw new ArgumentOutOfRangeException(nameOfI);
     }
 
     #endregion Private Methods

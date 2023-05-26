@@ -3,6 +3,7 @@
 
 using System.Collections.Concurrent;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace NaviSharp
@@ -141,6 +142,34 @@ namespace NaviSharp
             }
         }
 
+        public Matrix<T> this[Range? rowRange = null, Range? columnRange = null]
+        {
+            get
+            {
+                var startRow = 0;
+                var startColumn = 0;
+                var rowCount = RowCount;
+                var columnCount = ColumnCount;
+                if (rowRange.HasValue)
+                    (startRow, rowCount) = rowRange.Value.GetOffsetAndLength(RowCount);
+                if (columnRange.HasValue)
+                    (startColumn, columnCount) = columnRange.Value.GetOffsetAndLength(ColumnCount);
+                return SubMatrix(startRow, startColumn, rowCount, columnCount);
+            }
+            set
+            {
+                var startRow = 0;
+                var startColumn = 0;
+                var rowCount = RowCount;
+                var columnCount = ColumnCount;
+                if (rowRange.HasValue)
+                    (startRow, rowCount) = rowRange.Value.GetOffsetAndLength(RowCount);
+                if (columnRange.HasValue)
+                    (startColumn, columnCount) = columnRange.Value.GetOffsetAndLength(ColumnCount);
+                SetRange(value, 0, 0, startRow, startColumn, rowCount, columnCount);
+            }
+        }
+
         #endregion Public Indexers
 
         #region Public Methods
@@ -171,9 +200,10 @@ namespace NaviSharp
             return result;
         }
 
-        public void At(int i, int j, T num)
+        public Matrix<T> At(int i, int j, T num)
         {
             _data[i * ColumnCount + j] = num;
+            return this;
         }
 
         public T At(int i, int j)
@@ -207,6 +237,17 @@ namespace NaviSharp
                 result[i] = At(i, i);
             }
             return result;
+        }
+
+        public T[,] GetRange(int startRow, int startColumn, int rowCount, int columnCount)
+        {
+            ValidateRange(startRow, startColumn);
+            ValidateRange(startRow + rowCount - 1, startColumn + columnCount - 1);
+            var matrix = new T[rowCount, columnCount];
+            for (int i = 0; i < rowCount; i++)
+                for (int j = 0; j < columnCount; j++)
+                    matrix[i, j] = At(startRow + i, startColumn + j);
+            return matrix;
         }
 
         public T[] GetRow(int i)
@@ -248,7 +289,7 @@ namespace NaviSharp
             return RowCount == row && ColumnCount == column;
         }
 
-        public void SetColumn(int j, params T[] nums)
+        public Matrix<T> SetColumn(int j, params T[] nums)
         {
             int k = j;
             for (int i = 0; i < RowCount; i++)
@@ -256,18 +297,37 @@ namespace NaviSharp
                 _data[k] = nums[i];
                 k += ColumnCount;
             }
+            return this;
         }
 
-        public void SetDiagonal(params T[] nums)
+        public Matrix<T> SetDiagonal(params T[] nums)
         {
             var length = Min(RowCount, ColumnCount);
             for (int i = 0; i < length; i++)
             {
                 At(i, i, nums[i]);
             }
+            return this;
         }
 
-        public void SetRange(Matrix<T> sourceMatrix, int sourceRow, int sourceColumn, int destinationRow, int destinationColumn, int rowCount, int columnCount)
+        public Matrix<T> SetRange(T[,] sourceMatrix, int sourceRow, int sourceColumn, int destinationRow, int destinationColumn, int rowCount, int columnCount)
+        {
+            ValidateRange(destinationRow, destinationColumn);
+            ValidateRange(destinationRow + rowCount - 1, destinationColumn + columnCount - 1);
+            try
+            {
+                for (int i = 0; i < rowCount; i++)
+                    for (int j = 0; j < columnCount; j++)
+                        At(i + destinationRow, j + destinationColumn, sourceMatrix[i + sourceRow, j + sourceColumn]);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                throw new ArgumentOutOfRangeException($"{nameof(sourceMatrix)} is out of range.", e);
+            }
+            return this;
+        }
+
+        public Matrix<T> SetRange(Matrix<T> sourceMatrix, int sourceRow, int sourceColumn, int destinationRow, int destinationColumn, int rowCount, int columnCount)
         {
             ValidateRange(destinationRow, destinationColumn);
             sourceMatrix.ValidateRange(sourceRow, sourceColumn);
@@ -276,11 +336,13 @@ namespace NaviSharp
             for (int i = 0; i < rowCount; i++)
                 for (int j = 0; j < columnCount; j++)
                     At(i + destinationRow, j + destinationColumn, sourceMatrix.At(i + sourceRow, j + sourceColumn));
+            return this;
         }
 
-        public void SetRow(int i, params T[] nums)
+        public Matrix<T> SetRow(int i, params T[] nums)
         {
             Array.Copy(nums, 0, _data, i * ColumnCount, ColumnCount);
+            return this;
         }
 
         public Matrix<T> SubMatrix(int startRow, int startColumn, int rowCount, int columnCount)
@@ -379,16 +441,16 @@ namespace NaviSharp
             }
         }
 
-        private void ValidateRange(int i, int j)
+        private void ValidateRange(int i, int j, [CallerArgumentExpression(nameof(i))] string? nameofI = null, [CallerArgumentExpression(nameof(j))] string? nameofJ = null)
         {
             if (i >= RowCount || i < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(i));
+                throw new ArgumentOutOfRangeException(nameofI);
             }
 
             if (j >= ColumnCount || j < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(j));
+                throw new ArgumentOutOfRangeException(nameofJ);
             }
         }
 
