@@ -40,6 +40,11 @@ public partial class Vector<T> :
         IsColumn = true;
     }
 
+    public Vector(params T[] nums) : base(nums, MatrixVectorConstructMode.Ref)
+    {
+        IsColumn = true;
+    }
+
     #endregion Public Constructors
 
     #region Public Properties
@@ -195,7 +200,7 @@ public partial class Vector<T> :
     {
         if (!IsSizeOf(3) || !other.IsSizeOf(3))
             throw new ArgumentException("Only 3-dimensional vectors are supported");
-        return new Vector<T>(new T[] { At(1) * other.At(2) - At(2) * other.At(1), At(2) * other.At(0) - At(0) * other.At(2), At(0) * other.At(1) - At(1) * other.At(0) });
+        return new Vector<T>(At(1) * other.At(2) - At(2) * other.At(1), At(2) * other.At(0) - At(0) * other.At(2), At(0) * other.At(1) - At(1) * other.At(0));
     }
 
     public Vector<T> SetRange(T[] sourceArray, int sourceIndex, int vectorIndex, int count)

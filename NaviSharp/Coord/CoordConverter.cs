@@ -42,7 +42,7 @@ public partial record struct CartesianCoord
     }
 
     public static explicit operator Vector<double>(CartesianCoord coord)
-        => new(new double[] { coord.X, coord.Y, coord.Z });
+        => new(coord.X, coord.Y, coord.Z);
 
     public static explicit operator Vector3(CartesianCoord coord)
         => new((float)coord.X, (float)coord.Y, (float)coord.Z);
@@ -68,7 +68,7 @@ public partial record struct GeodeticCoord
     }
 
     public double[] ToArray() => (double[])this;
-    public Vector<double> ToVector() => new(new double[] { Latitude.Radians, Longitude.Radians, Altitude });
+    public Vector<double> ToVector() => new(Latitude.Radians, Longitude.Radians, Altitude);
     public static GeodeticCoord FromCart(CartesianCoord coord, EarthEllipsoid e) => coord.ToGeo(e);
     public static GeodeticCoord FromVector(Vector<double> vector)
     {
@@ -81,5 +81,5 @@ public partial record struct GeodeticCoord
         => new double[] { coord.Latitude.Radians, coord.Longitude.Radians, coord.Altitude };
 
     public static explicit operator Vector<double>(GeodeticCoord coord)
-    => new(new double[] { coord.Latitude.Radians, coord.Longitude.Radians, coord.Altitude });
+    => new(coord.Latitude.Radians, coord.Longitude.Radians, coord.Altitude);
 }

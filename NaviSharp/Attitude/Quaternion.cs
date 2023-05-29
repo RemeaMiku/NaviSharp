@@ -24,7 +24,7 @@ public partial struct Quaternion<T> :
     public Quaternion(T real, T i, T j, T k)
     {
         R = real;
-        IVector = new Vector<T>(new T[] { i, j, k });
+        IVector = new Vector<T>(i, j, k);
     }
 
     public Quaternion(T real, Vector<T> imaginary)

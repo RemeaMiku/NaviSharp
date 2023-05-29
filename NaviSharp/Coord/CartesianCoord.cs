@@ -35,7 +35,7 @@ public partial record struct CartesianCoord : IFormattable, IEquatable<Cartesian
         => $"[X:{X.ToString(format, formatProvider)},Y:{Y.ToString(format, formatProvider)},Z:{Z.ToString(format, formatProvider)}]";
 
     public static Vector<double> operator -(CartesianCoord left, CartesianCoord right)
-    => new(new double[] { left.X - right.X, left.Y - right.Y, left.Z - right.Z });
+    => new(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
     public static CartesianCoord operator +(CartesianCoord left, Vector<double> right)
     {
