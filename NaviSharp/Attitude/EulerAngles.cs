@@ -3,7 +3,7 @@
 
 namespace NaviSharp;
 
-public readonly partial record struct EulerAngle : IFormattable
+public readonly partial record struct EulerAngles : IFormattable
 {
     public Angle Yaw { get; init; }
 
@@ -11,14 +11,14 @@ public readonly partial record struct EulerAngle : IFormattable
 
     public Angle Roll { get; init; }
 
-    public EulerAngle()
+    public EulerAngles()
     {
         Yaw = ZeroAngle;
         Pitch = ZeroAngle;
         Roll = ZeroAngle;
     }
 
-    public EulerAngle(double yaw, double pitch, double roll)
+    public EulerAngles(double yaw, double pitch, double roll)
     {
         Yaw = new(yaw);
         Pitch = new(pitch);
@@ -26,7 +26,7 @@ public readonly partial record struct EulerAngle : IFormattable
         ValidateRange();
     }
 
-    public EulerAngle(Angle yaw, Angle pitch, Angle roll)
+    public EulerAngles(Angle yaw, Angle pitch, Angle roll)
     {
         Yaw = yaw;
         Pitch = pitch;

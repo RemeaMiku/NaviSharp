@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace NaviSharp;
 
-public partial record struct EulerAngle
+public partial record struct EulerAngles
 {
     public Matrix<T> ToRotationMatrix<T>() where T : struct, IFloatingPoint<T>
     {
@@ -80,16 +80,16 @@ public partial class Matrix<T>
 {
     #region Public Methods
 
-    public EulerAngle ToEulerAngle()
+    public EulerAngles ToEulerAngles()
     {
         if (!IsSizeOf(3, 3))
             throw new ArgumentException("The matrix must be a square matrix of order 3");
         var pitch = Atan(-At(2, 0) / Sqrt((dynamic)At(2, 1) * At(2, 1) + At(2, 2) * At(2, 2)));
         if (Abs(pitch) == OneHalfOfPI)
-            return new EulerAngle(double.NaN, pitch, double.NaN);
+            return new EulerAngles(double.NaN, pitch, double.NaN);
         var roll = Atan2((dynamic)At(2, 1), (dynamic)At(2, 2));
         var yaw = Atan2((dynamic)At(1, 0), (dynamic)At(0, 0));
-        return new EulerAngle(yaw, pitch, roll);
+        return new EulerAngles(yaw, pitch, roll);
     }
 
     #endregion Public Methods
