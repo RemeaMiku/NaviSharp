@@ -10,7 +10,7 @@ public class GaussProjection
     public GaussProjection(Angle longitudeOfCentralMeridian, EarthEllipsoid ellipsoid)
     {
         LongitudeOfCentralMeridian = longitudeOfCentralMeridian;
-        Ellipsoid = ellipsoid;
+        _ellipsoid = ellipsoid;
     }
 
     #endregion Public Constructors

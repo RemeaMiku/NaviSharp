@@ -1,10 +1,11 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
+using System.Diagnostics;
 using System.Numerics;
 
 namespace NaviSharp;
-
+[DebuggerDisplay("Week = {Week}, Sow = {Sow}, TotalSeconds = {SecondsSinceEpoch}, UTC = {Utc}")]
 public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionOperators<GpsTime, TimeSpan, GpsTime>, ISubtractionOperators<GpsTime, GpsTime, TimeSpan>, IEquatable<GpsTime>
 {
     public ushort Week { get; init; }
@@ -66,4 +67,6 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
         var totalSeconds = gpsTime.SecondsSinceEpoch - LeapSecond.GetLeapSeconds(gpsTime) + _startPointLeapSeconds;
         return StartPointAsUtcTime.AddSeconds(totalSeconds).ToOffset(TimeZoneInfo.Local.BaseUtcOffset);
     }
+    public override string ToString()
+        => $"{Week},{Sow:F4}";
 }

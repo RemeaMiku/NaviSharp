@@ -1,10 +1,11 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
+using System.Diagnostics;
 using System.Numerics;
 
 namespace NaviSharp;
-
+[DebuggerDisplay("{Radians}rad / {Degrees}° / {DegreesMinutesSeconds.Degrees}°{DegreesMinutesSeconds.Minutes}′{DegreesMinutesSeconds.Seconds}″")]
 public partial struct Angle :
     IEquatable<Angle>,
     IComparable<Angle>,
@@ -176,11 +177,11 @@ public partial struct Angle :
     public override bool Equals(object? obj)
         => obj is Angle angle && Equals(angle);
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
         => Radians.GetHashCode();
 
     public override string ToString()
-        => $"{Degrees}deg";
+        => $"{Degrees}°";
     /// <summary>
     /// Converts this to a formatted string.
     /// </summary>
@@ -235,7 +236,7 @@ public partial struct Angle :
         switch (format?.ToLower())
         {
             case "deg":
-                return $"{Degrees.ToString(formatProvider)}deg";
+                return $"{Degrees.ToString(formatProvider)}°";
 
             case "rad":
                 return $"{Radians.ToString(formatProvider)}";

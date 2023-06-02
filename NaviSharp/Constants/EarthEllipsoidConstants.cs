@@ -3,7 +3,7 @@
 
 namespace NaviSharp;
 
-public partial struct EarthEllipsoid
+public partial record class EarthEllipsoid
 {
     #region Public Classes
 

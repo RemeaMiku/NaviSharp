@@ -1,30 +1,21 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace NaviSharp;
-
-public readonly partial struct EarthEllipsoid : IEquatable<EarthEllipsoid>, IEqualityOperators<EarthEllipsoid, EarthEllipsoid, bool>
+[DebuggerDisplay("Name = {Name}, a = {A}, b = {B}, e1 = {E1}, e2 = {E2}, alpha = {Alpha}")]
+public partial record class EarthEllipsoid
 {
     #region Public Constructors
 
-    static EarthEllipsoid()
-    {
-        Wgs84 = FromAWithB(Wgs84Constants.a, Wgs84Constants.b, "Wgs84");
-        Cgcs2000 = FromAWithB(Cgcs2000Constants.a, Cgcs2000Constants.b, "Cgcs2000");
-        Grs80 = FromAWithB(Grs80Constants.a, Grs80Constants.b, "Grs80");
-    }
-
-    public EarthEllipsoid(double a, double b, string name = "UnnamedEllipsoid")
+    public EarthEllipsoid(double a, double b, string? name)
     {
         Name = name;
-        EquatorialRadius = a;
-        PolarRadius = b;
-        var e = GetEccentricity(a, b);
-        FirstEccentricity = e.E1;
-        SecondEccentricity = e.E2;
-        Oblateness = GetOblateness(a, b);
+        A = a;
+        B = b;
     }
 
     #endregion Public Constructors
@@ -32,53 +23,38 @@ public readonly partial struct EarthEllipsoid : IEquatable<EarthEllipsoid>, IEqu
     #region Public Properties
 
     public static EarthEllipsoid Cgcs2000 { get; }
+        = new(Cgcs2000Constants.a, Cgcs2000Constants.b, "CGCS2000");
     public static EarthEllipsoid Grs80 { get; }
+        = new(Grs80Constants.a, Grs80Constants.b, "GRS80");
+
     public static EarthEllipsoid Wgs84 { get; }
-    public double A { get => EquatorialRadius; }
-    public double Alpha { get => Oblateness; }
-    public double B { get => PolarRadius; }
-    public double E1 { get => FirstEccentricity; }
-    public double E2 { get => SecondEccentricity; }
-    public double EquatorialRadius { get; private init; }
-    public double FirstEccentricity { get; private init; }
-    public string Name { get; private init; }
-    public double Oblateness { get; private init; }
-    public double PolarRadius { get; private init; }
-    public double SecondEccentricity { get; private init; }
+        = new(Wgs84Constants.a, Wgs84Constants.b, "WGS84");
+    public double A { get; init; }
+    public double Alpha => GetOblateness(A, B);
+    public double B { get; init; }
+    public (double E1, double E2) E => GetEccentricity(A, B);
+    public double E1 => E.E1;
+    public double E2 => E.E2;
+
+    public string? Name { get; init; }
 
     #endregion Public Properties
 
     #region Public Methods
 
-    public static EarthEllipsoid FromAWithAlpha(double a, double alpha, string name = "UnnamedEllipsoid")
+    public static EarthEllipsoid FromAWithAlpha(double a, double alpha, string name)
     {
         var b = a * (1 - alpha);
-        var e = GetEccentricity(a, b);
-        return new EarthEllipsoid
-        {
-            Name = name,
-            EquatorialRadius = a,
-            PolarRadius = b,
-            FirstEccentricity = e.E1,
-            SecondEccentricity = e.E2,
-            Oblateness = alpha
-        };
+        return new EarthEllipsoid(a, b, name);
     }
 
-    public static EarthEllipsoid FromAWithB(double a, double b, string name = "UnnamedEllipsoid") => new(a, b, name);
+    public static EarthEllipsoid FromAWithB(double a, double b, string name)
+        => new(a, b, name);
 
-    public static EarthEllipsoid FromAWithE1(double a, double e1, string name = "UnnamedEllipsoid")
+    public static EarthEllipsoid FromAWithE1(double a, double e1, string name)
     {
-        var temp = GetBWithE2(a, e1);
-        return new EarthEllipsoid
-        {
-            Name = name,
-            EquatorialRadius = a,
-            FirstEccentricity = e1,
-            PolarRadius = temp.B,
-            SecondEccentricity = temp.E2,
-            Oblateness = GetOblateness(a, temp.B)
-        };
+        var b = GetB(a, e1);
+        return new EarthEllipsoid(a, b, name);
     }
 
     public double M(double latitude)
@@ -94,7 +70,7 @@ public readonly partial struct EarthEllipsoid : IEquatable<EarthEllipsoid>, IEqu
         => N((double)latitude);
 
     public override string ToString()
-        => Name;
+        => Name ?? "Unnamed";
 
     public double V(double latitude)
     {
@@ -118,28 +94,15 @@ public readonly partial struct EarthEllipsoid : IEquatable<EarthEllipsoid>, IEqu
 
     #region Private Methods
 
-    public static bool operator ==(EarthEllipsoid left, EarthEllipsoid right)
-        => left.Equals(right);
-
-    public static bool operator !=(EarthEllipsoid left, EarthEllipsoid right)
-        => !left.Equals(right);
-
-    public bool Equals(EarthEllipsoid other)
-        => A == other.A && B == other.B;
-
-    public override bool Equals(object? obj)
-        => obj is EarthEllipsoid ellipsoid && Equals(ellipsoid);
-
     public override int GetHashCode()
     {
         throw new NotImplementedException();
     }
 
-    private static (double B, double E2) GetBWithE2(double a, double e1)
+    private static double GetB(double a, double e1)
     {
         var b = a * a * (1 - e1 * e1);
-        var e2 = e1 * a / b;
-        return (b, e2);
+        return b;
     }
 
     private static (double E1, double E2) GetEccentricity(double a, double b)
