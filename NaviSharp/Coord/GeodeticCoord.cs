@@ -1,9 +1,12 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
-namespace NaviSharp;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
-public readonly partial record struct GeodeticCoord : IFormattable
+namespace NaviSharp;
+[DebuggerDisplay("Lat = {Latitude.Degrees}°, Lon = {Longitude.Degrees}°, Alt = {Altitude.Degrees}")]
+public readonly partial record struct GeodeticCoord : IFormattable, IParsable<GeodeticCoord>
 {
     public Angle Latitude { get; init; }
     public Angle Longitude { get; init; }
@@ -43,7 +46,7 @@ public readonly partial record struct GeodeticCoord : IFormattable
             throw new ArgumentException($"{nameof(Longitude)} must be in the range of (-180°,180°]");
     }
     public override string ToString()
-        => $"[Lat:{Latitude},Lon:{Longitude},Hgt:{Altitude}]";
+        => $"{Latitude:F8},{Longitude:F8},{Altitude:F3}";
     /// <summary>
     /// Converts this to a formatted string.
     /// </summary>
@@ -68,11 +71,42 @@ public readonly partial record struct GeodeticCoord : IFormattable
     /// </param>
     /// <param name="formatProvider"></param>
     /// <returns></returns>
-    public string ToString(string? format, IFormatProvider? formatProvider)
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        if (format == "deg" || format == "rad" || format == "dms")
-            return $"[Lat:{Latitude.ToString(format, formatProvider)},Lon:{Longitude.ToString(format, formatProvider)},Hgt:{Altitude.ToString(formatProvider)}]";
-        return $"[Lat:{Latitude.ToString(format, formatProvider)},Lon:{Longitude.ToString(format, formatProvider)},Hgt:{Altitude.ToString(format, formatProvider)}]";
+        if (format == null)
+        {
+            return ToString();
+        }
+        if (format == "deg" || format == "dms" || format == "rad")
+        {
+            return $"{Latitude.ToString(format, formatProvider)},{Longitude.ToString(format, formatProvider)},{Altitude.ToString(formatProvider)}";
+        }
+        return $"{Latitude.ToString(format, formatProvider)},{Longitude.ToString(format, formatProvider)},{Altitude.ToString(format, formatProvider)}";
     }
 
+    public static GeodeticCoord Parse(string s, IFormatProvider? provider = null)
+    {
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        var lat = Angle.Parse(values[0], provider);
+        var lon = Angle.Parse(values[1], provider);
+        var alt = double.Parse(values[2]);
+        return new(lat, lon, alt);
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out GeodeticCoord result)
+    {
+        if (string.IsNullOrEmpty(s))
+        {
+            result = default;
+            return false;
+        }
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        if (!Angle.TryParse(values[0], provider, out var lat) || !Angle.TryParse(values[1], provider, out var lon) || !double.TryParse(values[2], provider, out var alt))
+        {
+            result = default;
+            return false;
+        }
+        result = new(lat, lon, alt);
+        return true;
+    }
 }

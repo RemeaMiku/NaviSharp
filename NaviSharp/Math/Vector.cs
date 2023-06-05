@@ -1,6 +1,7 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +10,8 @@ namespace NaviSharp;
 public partial class Vector<T> :
     MatrixVectorBase<Vector<T>, T>,
     IMultiplyOperators<Vector<T>,
-    Vector<T>, T>
+    Vector<T>, T>,
+    IParsable<Vector<T>>
     where T : struct, IFloatingPoint<T>
 {
 
@@ -102,7 +104,7 @@ public partial class Vector<T> :
 
     #endregion Public Indexers
 
-    #region Public Methods
+    #region Public Methods    
 
     public static implicit operator Matrix<T>(Vector<T> vector)
     {
@@ -269,6 +271,31 @@ public partial class Vector<T> :
     {
         if (i < 0 || i >= Dimension)
             throw new ArgumentOutOfRangeException(nameOfI);
+    }
+
+    public static Vector<T> Parse(string s, IFormatProvider? provider = null)
+    {
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        var result = new Vector<T>(values.Length);
+        for (int i = 0; i < values.Length; i++)
+        {
+            result.At(i, T.Parse(values[i], provider));
+        }
+        return result;
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Vector<T> result)
+    {
+        result = null;
+        if (string.IsNullOrEmpty(s))
+            return false;
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        var nums = new T[values.Length];
+        for (int i = 0; i < nums.Length; i++)
+            if (!T.TryParse(values[i], provider, out nums[i]))
+                return false;
+        result = new Vector<T>(nums);
+        return true;
     }
 
     #endregion Private Methods

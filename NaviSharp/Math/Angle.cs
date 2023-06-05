@@ -2,10 +2,11 @@
 //  Email:2020302142257@whu.edu.cn
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace NaviSharp;
-[DebuggerDisplay("{Radians}rad / {Degrees}° / {DegreesMinutesSeconds.Degrees}°{DegreesMinutesSeconds.Minutes}′{DegreesMinutesSeconds.Seconds}″")]
+[DebuggerDisplay("{Radians}rad | {Degrees}° | {DegreesMinutesSeconds.Degrees}°{DegreesMinutesSeconds.Minutes}′{DegreesMinutesSeconds.Seconds}″")]
 public partial struct Angle :
     IEquatable<Angle>,
     IComparable<Angle>,
@@ -13,7 +14,8 @@ public partial struct Angle :
     ISubtractionOperators<Angle, Angle, Angle>,
     IMultiplyOperators<Angle, double, Angle>,
     IDivisionOperators<Angle, double, Angle>,
-    IFormattable
+    IFormattable,
+    IParsable<Angle>
 {
     #region Public Constructors
 
@@ -168,45 +170,20 @@ public partial struct Angle :
 
     public void AddRadians(double radians) => Radians += radians;
 
-    public int CompareTo(Angle other)
+    public readonly int CompareTo(Angle other)
             => Radians.CompareTo(other.Radians);
 
-    public bool Equals(Angle other)
+    public readonly bool Equals(Angle other)
         => Radians == other.Radians;
 
-    public override bool Equals(object? obj)
+    public override readonly bool Equals(object? obj)
         => obj is Angle angle && Equals(angle);
 
     public override readonly int GetHashCode()
         => Radians.GetHashCode();
 
     public override string ToString()
-        => $"{Degrees}°";
-    /// <summary>
-    /// Converts this to a formatted string.
-    /// </summary>
-    /// <param name="format">
-    /// <list type="table">
-    ///     <listheader>
-    ///       <term>Format strings</term>
-    ///     </listheader>
-    ///     <item>
-    ///       <term>"deg"</term>
-    ///       <description>Format in degrees follow by a "deg"</description>
-    ///     </item>
-    ///     <item>
-    ///       <term>"rad"</term>
-    ///       <description>Format in radians</description>
-    ///     </item>
-    ///     <item>
-    ///       <term>"dms"</term>
-    ///       <description>Format in [degrees, minutes, seconds]</description>
-    ///     </item>
-    ///   </list>
-    /// </param>
-    /// <returns></returns>
-    public string ToString(string format)
-        => ToString(format, null);
+        => $"{Degrees:F8}";
     /// <summary>
     /// Converts this to a formatted string.
     /// </summary>
@@ -231,23 +208,36 @@ public partial struct Angle :
     /// </param>
     /// <param name="formatProvider"></param>
     /// <returns></returns>
-    public string ToString(string? format, IFormatProvider? formatProvider)
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
+        if (format == null)
+            return ToString();
         switch (format?.ToLower())
         {
             case "deg":
-                return $"{Degrees.ToString(formatProvider)}°";
-
+                return $"{Degrees.ToString(formatProvider)}";
             case "rad":
                 return $"{Radians.ToString(formatProvider)}";
-
             case "dms":
                 var dms = DegreesMinutesSeconds;
-                return $"[{dms.Degrees.ToString(formatProvider)}deg,{dms.Minutes.ToString(formatProvider)}min,{dms.Seconds.ToString(formatProvider)}sec]";
-
+                return $"{dms.Degrees.ToString(formatProvider)},{dms.Minutes.ToString(formatProvider)},{dms.Seconds.ToString(formatProvider)}";
             default:
-                return $"{Degrees.ToString(format, formatProvider)}deg";
+                return $"{Degrees.ToString(format, formatProvider)}";
         }
+    }
+
+    public static Angle Parse(string s, IFormatProvider? provider = null)
+    => FromDegrees(double.Parse(s, provider));
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Angle result)
+    {
+        if (!double.TryParse(s, provider, out var deg))
+        {
+            result = default;
+            return false;
+        }
+        result = FromDegrees(deg);
+        return true;
     }
 
     #endregion Public Methods

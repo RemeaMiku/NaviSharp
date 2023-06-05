@@ -1,9 +1,13 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
 namespace NaviSharp;
 
-public readonly partial record struct EulerAngles : IFormattable
+[DebuggerDisplay("Yaw = {Yaw.Degrees}°, Pitch = {Pitch.Degrees}°, Roll = {Roll.Degrees}°")]
+public readonly partial record struct EulerAngles : IFormattable, IParsable<EulerAngles>
 {
     public Angle Yaw { get; init; }
 
@@ -45,8 +49,39 @@ public readonly partial record struct EulerAngles : IFormattable
     }
 
     public override string ToString()
-        => $"[Yaw:{Yaw},Pitch:{Pitch},Roll:{Roll}]";
+        => $"{Yaw:F3},{Pitch:F3},{Roll:F3}";
 
-    public string ToString(string? format, IFormatProvider? formatProvider)
-        => $"[Yaw:{Yaw.ToString(format, formatProvider)},Pitch:{Pitch.ToString(format, formatProvider)},Roll:{Roll.ToString(format, formatProvider)}]";
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
+    {
+        if (format == null)
+            return ToString();
+        return $"{Yaw.ToString(format, formatProvider)},{Pitch.ToString(format, formatProvider)},{Roll.ToString(format, formatProvider)}";
+    }
+
+
+    public static EulerAngles Parse(string s, IFormatProvider? provider = null)
+    {
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        var yaw = Angle.Parse(values[0], provider);
+        var pitch = Angle.Parse(values[1], provider);
+        var roll = Angle.Parse(values[2], provider);
+        return new(yaw, pitch, roll);
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out EulerAngles result)
+    {
+        if (string.IsNullOrEmpty(s))
+        {
+            result = default;
+            return false;
+        }
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        if (!Angle.TryParse(values[0], provider, out var yaw) || !Angle.TryParse(values[1], provider, out var pitch) || !Angle.TryParse(values[2], provider, out var roll))
+        {
+            result = default;
+            return false;
+        }
+        result = new(yaw, pitch, roll);
+        return true;
+    }
 }

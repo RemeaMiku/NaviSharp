@@ -2,11 +2,13 @@
 //  Email:2020302142257@whu.edu.cn
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.Serialization;
 
 namespace NaviSharp;
 [DebuggerDisplay("Week = {Week}, Sow = {Sow}, TotalSeconds = {SecondsSinceEpoch}, UTC = {Utc}")]
-public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionOperators<GpsTime, TimeSpan, GpsTime>, ISubtractionOperators<GpsTime, GpsTime, TimeSpan>, IEquatable<GpsTime>
+public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionOperators<GpsTime, TimeSpan, GpsTime>, ISubtractionOperators<GpsTime, GpsTime, TimeSpan>, IEquatable<GpsTime>, IParsable<GpsTime>
 {
     public ushort Week { get; init; }
     public double Sow { get; init; }
@@ -69,4 +71,30 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
     }
     public override string ToString()
         => $"{Week},{Sow:F4}";
+
+    public static GpsTime Parse(string s, IFormatProvider? provider = null)
+    {
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        var week = ushort.Parse(values[0]);
+        var sow = double.Parse(values[1]);
+        return new(week, sow);
+    }
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out GpsTime result)
+    {
+        if (string.IsNullOrEmpty(s))
+        {
+            result = new(0, double.NaN);
+            return false;
+        }
+        var values = s.Split(',', StringSplitOptions.TrimEntries);
+        if (!ushort.TryParse(values[0], out var week) || !double.TryParse(values[1], out var sow))
+        {
+            result = new(0, double.NaN);
+            return false;
+        }
+        result = new(week, sow);
+        return true;
+    }
+
 }
