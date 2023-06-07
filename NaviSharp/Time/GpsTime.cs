@@ -88,6 +88,11 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
             return false;
         }
         var values = s.Split(',', StringSplitOptions.TrimEntries);
+        if (values.Length != 2)
+        {
+            result = new(0, double.NaN);
+            return false;
+        }
         if (!ushort.TryParse(values[0], out var week) || !double.TryParse(values[1], out var sow))
         {
             result = new(0, double.NaN);

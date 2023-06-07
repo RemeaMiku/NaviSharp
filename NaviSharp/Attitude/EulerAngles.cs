@@ -81,7 +81,15 @@ public readonly partial record struct EulerAngles : IFormattable, IParsable<Eule
             result = default;
             return false;
         }
-        result = new(yaw, pitch, roll);
+        try
+        {
+            result = new(yaw, pitch, roll);
+        }
+        catch (Exception)
+        {
+            result = default;
+            return false;
+        }
         return true;
     }
 }

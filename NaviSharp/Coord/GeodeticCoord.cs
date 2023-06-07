@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace NaviSharp;
-[DebuggerDisplay("Lat = {Latitude.Degrees}°, Lon = {Longitude.Degrees}°, Alt = {Altitude.Degrees}")]
+[DebuggerDisplay("Lat = {Latitude.Degrees}°, Lon = {Longitude.Degrees}°, Alt = {Altitude}")]
 public readonly partial record struct GeodeticCoord : IFormattable, IParsable<GeodeticCoord>
 {
     public Angle Latitude { get; init; }
