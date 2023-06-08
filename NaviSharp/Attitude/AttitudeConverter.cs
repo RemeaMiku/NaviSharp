@@ -44,7 +44,7 @@ public partial struct Quaternion<T>
 {
     #region Public Methods
 
-    public Matrix<T> ToRotationMatrix()
+    public readonly Matrix<T> ToRotationMatrix()
     {
         var q1q1 = R * R;
         var q2q2 = I * I;
@@ -64,7 +64,7 @@ public partial struct Quaternion<T>
         });
     }
 
-    public Vector<T> ToVector()
+    public readonly Vector<T> ToVector()
     {
         if (T.IsZero(R))
             return T.Pi * IVector;

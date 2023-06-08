@@ -136,7 +136,7 @@ public partial class Matrix<T>
         int n = matrix.RowCount;
         var result = new Matrix<T>(matrix);
         var lum = Decompose(matrix, out int[] perm,
-          out int toggle) ?? throw new Exception("Unable to compute inverse");
+          out _) ?? throw new Exception("Unable to compute inverse");
         var b = new T[n];
         for (int i = 0; i < n; ++i)
         {

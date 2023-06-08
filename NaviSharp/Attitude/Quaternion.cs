@@ -39,7 +39,7 @@ public partial struct Quaternion<T> :
 
     #region Public Properties
 
-    public T I
+    public readonly T I
     {
         get => IVector.At(0);
         set => IVector.At(0, value);
@@ -47,13 +47,13 @@ public partial struct Quaternion<T> :
 
     public Vector<T> IVector { get; init; }
 
-    public T J
+    public readonly T J
     {
         get => IVector.At(1);
         set => IVector.At(1, value);
     }
 
-    public T K
+    public readonly T K
     {
         get => IVector.At(2);
         set => IVector.At(2, value);
@@ -67,7 +67,7 @@ public partial struct Quaternion<T> :
 
     public T this[int i]
     {
-        get
+        readonly get
         {
             return i switch
             {
@@ -125,7 +125,7 @@ public partial struct Quaternion<T> :
     public static Quaternion<T> operator +(Quaternion<T> left, Quaternion<T> right)
         => new(left.R + right.R, left.IVector + right.IVector);
 
-    public override string ToString()
+    public override readonly string ToString()
         => $"[{R} {I} {J} {K}]";
 
     #endregion Public Methods

@@ -7,7 +7,7 @@ namespace NaviSharp;
 
 public partial record struct CartesianCoord
 {
-    public GeodeticCoord ToGeo(EarthEllipsoid e)
+    public readonly GeodeticCoord ToGeo(EarthEllipsoid e)
     {
         var L = Atan2(Y, X);
         var r = Sqrt(X * X + Y * Y);
@@ -46,9 +46,9 @@ public partial record struct CartesianCoord
 
     public static explicit operator Vector3(CartesianCoord coord)
         => new((float)coord.X, (float)coord.Y, (float)coord.Z);
-    public double[] ToArray() => (double[])this;
-    public Vector<double> ToVector() => (Vector<double>)this;
-    public Vector3 ToVector3() => (Vector3)this;
+    public readonly double[] ToArray() => (double[])this;
+    public readonly Vector<double> ToVector() => (Vector<double>)this;
+    public readonly Vector3 ToVector3() => (Vector3)this;
     public static CartesianCoord FromGeo(GeodeticCoord coord, EarthEllipsoid e) => coord.ToCart(e);
     public static CartesianCoord FromVector(Vector<double> vector)
     {

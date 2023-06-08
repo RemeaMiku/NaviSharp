@@ -30,13 +30,13 @@ public partial struct Angle :
 
     public double Degrees
     {
-        get => DegreesPerRadian * Radians;
+        readonly get => DegreesPerRadian * Radians;
         set => Radians = value * RadiansPerDegree;
     }
 
     public (int Degrees, byte Minutes, double Seconds) DegreesMinutesSeconds
     {
-        get
+        readonly get
         {
             var totalSeconds = 3600M * (decimal)Degrees;
             var seconds = Abs(totalSeconds % 60M);
@@ -72,7 +72,7 @@ public partial struct Angle :
         return angle;
     }
 
-    public void Deconstruct(out int degrees, out byte minutes, out double seconds)
+    public readonly void Deconstruct(out int degrees, out byte minutes, out double seconds)
     {
         var totalSeconds = 3600M * (decimal)Degrees;
         (degrees, minutes, seconds) = ((int)Abs(totalSeconds % 60M), (byte)Abs(totalSeconds / 60M % 60M), (double)(totalSeconds / 3600M));
@@ -182,7 +182,7 @@ public partial struct Angle :
     public override readonly int GetHashCode()
         => Radians.GetHashCode();
 
-    public override string ToString()
+    public override readonly string ToString()
         => $"{Degrees:F8}";
     /// <summary>
     /// Converts this to a formatted string.
@@ -208,7 +208,7 @@ public partial struct Angle :
     /// </param>
     /// <param name="formatProvider"></param>
     /// <returns></returns>
-    public string ToString(string? format, IFormatProvider? formatProvider = null)
+    public readonly string ToString(string? format, IFormatProvider? formatProvider = null)
     {
         if (format == null)
             return ToString();
