@@ -67,7 +67,7 @@ public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionO
     public static UtcTime ToUtc(GpsTime gpsTime)
     {
         var totalSeconds = gpsTime.SecondsSinceEpoch - LeapSecond.GetLeapSeconds(gpsTime) + _startPointLeapSeconds;
-        return StartPointAsUtcTime.AddSeconds(totalSeconds).ToOffset(TimeZoneInfo.Local.BaseUtcOffset);
+        return StartPointAsUtcTime.AddSeconds(totalSeconds);
     }
     public override string ToString()
         => $"{Week},{Sow:F4}";
