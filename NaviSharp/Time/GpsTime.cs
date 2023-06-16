@@ -4,7 +4,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
-using System.Runtime.Serialization;
 
 namespace NaviSharp;
 [DebuggerDisplay("Week = {Week}, Sow = {Sow}, TotalSeconds = {SecondsSinceEpoch}, UTC = {Utc}")]

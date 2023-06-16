@@ -1,9 +1,7 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Numerics;
 
 namespace NaviSharp;
 [DebuggerDisplay("Name = {Name}, a = {A}, b = {B}, e1 = {E1}, e2 = {E2}, alpha = {Alpha}")]
