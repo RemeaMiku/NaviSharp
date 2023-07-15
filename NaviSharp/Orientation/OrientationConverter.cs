@@ -5,16 +5,8 @@ namespace NaviSharp.Orientation;
 
 public static class OrientationConverter
 {
-    private static void Validate(Matrix<double> matrix)
-    {
-        if (!matrix.IsSizeOf(3, 3))
-            throw new ArgumentException("The matrix must be a square matrix of order 3");
-    }
-    private static void Validate(Vector<double> vector)
-    {
-        if (!vector.IsSizeOf(3))
-            throw new ArgumentException("The vector must be 3 dimensional");
-    }
+    #region Public Methods
+
     public static EulerAngles ToEulerAngles(Matrix<double> rotationMatrix)
     {
         Validate(rotationMatrix);
@@ -32,6 +24,7 @@ public static class OrientationConverter
             yaw += DoublePI;
         return new(yaw, pitch, roll);
     }
+
     /// <summary>
     /// https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions
     /// </summary>
@@ -46,6 +39,7 @@ public static class OrientationConverter
             yaw += DoublePI;
         return new(yaw, pitch, roll);
     }
+
     public static RotationMatrix ToRotationMatrix(EulerAngles eulerAngles)
     {
         var yaw = eulerAngles.Yaw;
@@ -88,6 +82,7 @@ public static class OrientationConverter
             {  2*(q2q4-q1q3), 2*(q3q4+q1q2),q1q1-q2q2-q3q3+q4q4}
         });
     }
+
     public static RotationMatrix ToRotationMatrix(Vector<double> rotationVector)
     {
         Validate(rotationVector);
@@ -110,6 +105,7 @@ public static class OrientationConverter
         var c33 = temp * e3 * e3 + cos;
         return new(c11, c12, c13, c21, c22, c23, c31, c32, c33);
     }
+
     public static Quaternion<double> ToQuaternion(EulerAngles eulerAngles)
     {
         var yaw = eulerAngles.Yaw;
@@ -196,12 +192,14 @@ public static class OrientationConverter
             return new(1, 0, 0, 0);
         return new(Cos(norm), Sin(norm) / norm * half);
     }
+
     public static RotationVector ToRotationVector(Quaternion<double> q)
     {
         var axis = q.IVector.Unitization();
         var theta = 2 * Acos(q.R);
         return new(axis, new(theta));
     }
+
     public static RotationVector ToRotationVector(Matrix<double> rotationMatrix)
     {
         var c11 = rotationMatrix.At(0, 0);
@@ -220,4 +218,21 @@ public static class OrientationConverter
         var e3 = (c21 - c12) / doubleSin;
         return new(e1, e2, e3, new(theta));
     }
+
+    #endregion Public Methods
+
+    #region Private Methods
+
+    private static void Validate(Matrix<double> matrix)
+    {
+        if (!matrix.IsSizeOf(3, 3))
+            throw new ArgumentException("The matrix must be a square matrix of order 3");
+    }
+    private static void Validate(Vector<double> vector)
+    {
+        if (!vector.IsSizeOf(3))
+            throw new ArgumentException("The vector must be 3 dimensional");
+    }
+
+    #endregion Private Methods
 }

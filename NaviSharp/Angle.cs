@@ -17,6 +17,8 @@ public partial struct Angle :
     IFormattable,
     IParsable<Angle>
 {
+    #region Public Fields
+
     public const double RadiansPerDegree = PI / 180;
     public const double DoublePI = 2 * PI;
     public const double OneHalfOfPI = PI / 2;
@@ -25,6 +27,8 @@ public partial struct Angle :
     public readonly static Angle RoundAngle = new(DoublePI);
     public readonly static Angle StraightAngle = new(PI);
     public readonly static Angle ZeroAngle = new(0);
+
+    #endregion Public Fields
 
     #region Public Constructors
 
@@ -79,12 +83,6 @@ public partial struct Angle :
         if (range == AngleRange.NegativeStraightToStraight && angle > StraightAngle)
             angle -= RoundAngle;
         return angle;
-    }
-
-    public readonly void Deconstruct(out int degrees, out byte minutes, out double seconds)
-    {
-        var totalSeconds = 3600M * (decimal)Degrees;
-        (degrees, minutes, seconds) = ((int)Abs(totalSeconds % 60M), (byte)Abs(totalSeconds / 60M % 60M), (double)(totalSeconds / 3600M));
     }
 
     public static Angle AddDegrees(Angle angle, double degrees)
@@ -175,6 +173,25 @@ public partial struct Angle :
         return new(System.Math.Clamp(angle.Radians, min.Radians, max.Radians));
     }
 
+    public static Angle Parse(string s, IFormatProvider? provider = null)
+    => FromDegrees(double.Parse(s, provider));
+
+    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Angle result)
+    {
+        if (!double.TryParse(s, provider, out var deg))
+        {
+            result = default;
+            return false;
+        }
+        result = FromDegrees(deg);
+        return true;
+    }
+
+    public readonly void Deconstruct(out int degrees, out byte minutes, out double seconds)
+    {
+        var totalSeconds = 3600M * (decimal)Degrees;
+        (degrees, minutes, seconds) = ((int)Abs(totalSeconds % 60M), (byte)Abs(totalSeconds / 60M % 60M), (double)(totalSeconds / 3600M));
+    }
     public void AddDegrees(double degrees) => Radians += degrees * RadiansPerDegree;
 
     public void AddRadians(double radians) => Radians += radians;
@@ -234,21 +251,6 @@ public partial struct Angle :
                 return $"{Degrees.ToString(format, formatProvider)}";
         }
     }
-
-    public static Angle Parse(string s, IFormatProvider? provider = null)
-    => FromDegrees(double.Parse(s, provider));
-
-    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Angle result)
-    {
-        if (!double.TryParse(s, provider, out var deg))
-        {
-            result = default;
-            return false;
-        }
-        result = FromDegrees(deg);
-        return true;
-    }
-
     #endregion Public Methods
 
 }

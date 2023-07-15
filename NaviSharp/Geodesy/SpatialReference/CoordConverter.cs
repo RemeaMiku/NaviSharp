@@ -7,6 +7,8 @@ namespace NaviSharp.SpatialReference;
 
 public static class CoordConverter
 {
+    #region Public Methods
+
     public static EcefCoord ToEcef(GeodeticCoord geodeticCoord, EarthEllipsoid earthEllipsoid)
     {
         var n = earthEllipsoid.N(geodeticCoord.L);
@@ -38,6 +40,8 @@ public static class CoordConverter
         var H = (r * Cos(B) + ecefCoord.Z * Sin(B) - earthEllipsoid.A * earthEllipsoid.W(B));
         return new GeodeticCoord(B, L, H);
     }
+
+    #endregion Public Methods
 }
 
 //public partial record struct EcefCoord

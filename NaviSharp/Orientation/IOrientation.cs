@@ -11,8 +11,12 @@ namespace NaviSharp.Orientation;
 
 public interface IOrientation
 {
+    #region Public Methods
+
     public EulerAngles ToEulerAngles();
     public RotationMatrix ToRotationMatrix();
     public RotationVector ToRotationVector();
     public Quaternion<double> ToQuaternion();
+
+    #endregion Public Methods
 }
