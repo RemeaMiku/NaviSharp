@@ -1,4 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Numerics;
 using NaviSharp;
+using NaviSharp.Orientation;
+using NaviSharp.SpatialReference;
+
 Console.WriteLine("NaviSharp");
-Console.WriteLine(new GeodeticCoord(Angle.FromDegrees(40.08226974784), Angle.FromDegrees(116.24194286667), 63.5237).ToCart(EarthEllipsoid.Wgs84));
+var e = new EulerAngles(Angle.FromDegrees(183.1), Angle.FromDegrees(-39), Angle.FromDegrees(-83.1));
+Console.WriteLine(e.ToRotationVector().ToQuaternion().ToRotationMatrix().ToEulerAngles().ToRotationMatrix().ToRotationVector().ToEulerAngles().ToQuaternion().ToRotationVector().ToQuaternion().ToEulerAngles());
