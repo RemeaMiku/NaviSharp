@@ -4,8 +4,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using NaviSharp.LinearAlgebra;
 
 namespace NaviSharp;
+
+#pragma warning disable CA2260
 
 public partial class Vector<T> :
     MatrixVectorBase<Vector<T>, T>,
@@ -106,7 +109,7 @@ public partial class Vector<T> :
 
     #region Public Methods    
 
-    public static implicit operator Matrix<T>(Vector<T> vector)
+    public static explicit operator Matrix<T>(Vector<T> vector)
     {
         if (vector.IsColumn)
             return new(vector.Dimension, 1, vector._data);
@@ -198,7 +201,7 @@ public partial class Vector<T> :
         return Sqrt((dynamic)result);
     }
 
-    public Vector<T> OuterProduct(Vector<T> other)
+    public Vector<T> CrossProduct(Vector<T> other)
     {
         if (!IsSizeOf(3) || !other.IsSizeOf(3))
             throw new ArgumentException("Only 3-dimensional vectors are supported");

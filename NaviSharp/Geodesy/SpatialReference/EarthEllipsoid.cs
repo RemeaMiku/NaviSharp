@@ -3,7 +3,7 @@
 
 using System.Diagnostics;
 
-namespace NaviSharp;
+namespace NaviSharp.SpatialReference;
 [DebuggerDisplay("Name = {Name}, a = {A}, b = {B}, e1 = {E1}, e2 = {E2}, alpha = {Alpha}")]
 public partial record class EarthEllipsoid
 {
@@ -20,13 +20,7 @@ public partial record class EarthEllipsoid
 
     #region Public Properties
 
-    public static EarthEllipsoid Cgcs2000 { get; }
-        = new(Cgcs2000Constants.a, Cgcs2000Constants.b, "CGCS2000");
-    public static EarthEllipsoid Grs80 { get; }
-        = new(Grs80Constants.a, Grs80Constants.b, "GRS80");
 
-    public static EarthEllipsoid Wgs84 { get; }
-        = new(Wgs84Constants.a, Wgs84Constants.b, "WGS84");
     public double A { get; init; }
     public double Alpha => GetOblateness(A, B);
     public double B { get; init; }

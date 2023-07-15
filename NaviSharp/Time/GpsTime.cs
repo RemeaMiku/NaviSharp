@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-namespace NaviSharp;
+namespace NaviSharp.Time;
 [DebuggerDisplay("Week = {Week}, Sow = {Sow}, TotalSeconds = {SecondsSinceEpoch}, UTC = {Utc}")]
 public readonly partial record struct GpsTime : IComparable<GpsTime>, IAdditionOperators<GpsTime, TimeSpan, GpsTime>, ISubtractionOperators<GpsTime, GpsTime, TimeSpan>, IEquatable<GpsTime>, IParsable<GpsTime>
 {

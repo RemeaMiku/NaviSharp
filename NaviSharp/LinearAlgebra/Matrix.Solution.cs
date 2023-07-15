@@ -29,7 +29,7 @@ public partial class Matrix<T>
 
         for (int j = 0; j < n - 1; ++j) // each column
         {
-            var colMax = Math.Abs((dynamic)result[j, j]); // find largest val in col
+            var colMax = System.Math.Abs((dynamic)result[j, j]); // find largest val in col
             int pRow = j;
             //for (int i = j + 1; i less-than n; ++i)
             //{
@@ -43,9 +43,9 @@ public partial class Matrix<T>
             // reader Matt V needed this:
             for (int i = j + 1; i < n; ++i)
             {
-                if (Math.Abs((dynamic)result[i, j]) > colMax)
+                if (System.Math.Abs((dynamic)result[i, j]) > colMax)
                 {
-                    colMax = Math.Abs((dynamic)result[i, j]);
+                    colMax = System.Math.Abs((dynamic)result[i, j]);
                     pRow = i;
                 }
             }

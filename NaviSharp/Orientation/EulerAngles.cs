@@ -3,11 +3,12 @@
 
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using NaviSharp.Orientation;
 
 namespace NaviSharp;
 
 [DebuggerDisplay("Yaw = {Yaw.Degrees}°, Pitch = {Pitch.Degrees}°, Roll = {Roll.Degrees}°")]
-public readonly partial record struct EulerAngles : IFormattable, IParsable<EulerAngles>
+public readonly partial record struct EulerAngles : IOrientation, IFormattable, IParsable<EulerAngles>
 {
     public Angle Yaw { get; init; }
 
@@ -40,8 +41,8 @@ public readonly partial record struct EulerAngles : IFormattable, IParsable<Eule
 
     private void ValidateRange()
     {
-        if (Yaw <= -StraightAngle || Yaw > StraightAngle)
-            throw new ArgumentException($"{nameof(Yaw)} must be in the range of (-180°,180°]");
+        if (Yaw < ZeroAngle || Yaw >= RoundAngle)
+            throw new ArgumentException($"{nameof(Yaw)} must be in the range of [-0°,360°)");
         if (Pitch < -RightAngle || Pitch > RightAngle)
             throw new ArgumentException($"{nameof(Pitch)} must be in the range of [-90°,90°]");
         if (Roll <= -StraightAngle || Roll > StraightAngle)
@@ -92,4 +93,15 @@ public readonly partial record struct EulerAngles : IFormattable, IParsable<Eule
         }
         return true;
     }
+
+    public EulerAngles ToEulerAngles() => this;
+
+    public RotationMatrix ToRotationMatrix()
+        => OrientationConverter.ToRotationMatrix(this);
+
+    public RotationVector ToRotationVector()
+        => OrientationConverter.ToRotationVector(ToQuaternion());
+
+    public Quaternion<double> ToQuaternion()
+        => OrientationConverter.ToQuaternion(this);
 }

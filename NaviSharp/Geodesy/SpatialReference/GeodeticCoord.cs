@@ -4,7 +4,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
-namespace NaviSharp;
+namespace NaviSharp.SpatialReference;
 [DebuggerDisplay("Lat = {Latitude.Degrees}°, Lon = {Longitude.Degrees}°, Alt = {Altitude}")]
 public readonly partial record struct GeodeticCoord : IFormattable, IParsable<GeodeticCoord>
 {
@@ -14,12 +14,6 @@ public readonly partial record struct GeodeticCoord : IFormattable, IParsable<Ge
     public double B => Latitude.Radians;
     public double L => Longitude.Radians;
     public double H => Altitude;
-    public GeodeticCoord()
-    {
-        Latitude = ZeroAngle;
-        Longitude = ZeroAngle;
-        Altitude = 0;
-    }
     public GeodeticCoord(double latitude, double longitude, double altitude)
     {
         Latitude = new(latitude);
@@ -109,4 +103,7 @@ public readonly partial record struct GeodeticCoord : IFormattable, IParsable<Ge
         result = new(lat, lon, alt);
         return true;
     }
+
+    public EcefCoord ToEcefCoord(EarthEllipsoid earthEllipsoid)
+    => CoordConverter.ToEcef(this, earthEllipsoid);
 }

@@ -17,6 +17,15 @@ public partial struct Angle :
     IFormattable,
     IParsable<Angle>
 {
+    public const double RadiansPerDegree = PI / 180;
+    public const double DoublePI = 2 * PI;
+    public const double OneHalfOfPI = PI / 2;
+    public const double DegreesPerRadian = 180 / PI;
+    public readonly static Angle RightAngle = new(OneHalfOfPI);
+    public readonly static Angle RoundAngle = new(DoublePI);
+    public readonly static Angle StraightAngle = new(PI);
+    public readonly static Angle ZeroAngle = new(0);
+
     #region Public Constructors
 
     public Angle(double radians) => Radians = radians;
@@ -85,19 +94,19 @@ public partial struct Angle :
     => new(angle.Radians + radians);
 
     public static double Cos(Angle angle)
-        => Math.Cos(angle.Radians);
+        => System.Math.Cos(angle.Radians);
 
     public static double Cot(Angle angle)
-        => Math.Tan(PI / 2 - angle.Radians);
+        => System.Math.Tan(PI / 2 - angle.Radians);
 
     public static double Cot(double radians)
-        => Math.Tan(PI / 2 - radians);
+        => System.Math.Tan(PI / 2 - radians);
 
     public static double Csc(Angle angle)
         => 1 / Sin(angle);
 
     public static double Csc(double radians)
-        => 1 / Math.Sin(radians);
+        => 1 / System.Math.Sin(radians);
 
     public static explicit operator double(Angle angle)
         => angle.Radians;
@@ -151,19 +160,19 @@ public partial struct Angle :
         => 1 / Cos(angle);
 
     public static double Sec(double radians)
-        => 1 / Math.Cos(radians);
+        => 1 / System.Math.Cos(radians);
 
     public static double Sin(Angle angle)
-        => Math.Sin(angle.Radians);
+        => System.Math.Sin(angle.Radians);
 
     public static double Tan(Angle angle)
-        => Math.Tan(angle.Radians);
+        => System.Math.Tan(angle.Radians);
 
     public static Angle Clamp(Angle angle, Angle min, Angle max)
     {
         if (min > max)
             throw new ArgumentOutOfRangeException($"{nameof(min)}({min.Degrees}deg) can't be greater than {nameof(max)}({max.Degrees}deg).");
-        return new(Math.Clamp(angle.Radians, min.Radians, max.Radians));
+        return new(System.Math.Clamp(angle.Radians, min.Radians, max.Radians));
     }
 
     public void AddDegrees(double degrees) => Radians += degrees * RadiansPerDegree;

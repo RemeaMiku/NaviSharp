@@ -103,11 +103,11 @@ public partial class Matrix<T>
         return result;
     }
 
-    public static Matrix<T> FromAxialVector(Vector<T> vector)
+    public static Matrix<T> FromCrossProduct(Vector<T> vector)
     {
         if (!vector.IsSizeOf(3))
             throw new ArgumentException("");
-        return new Matrix<T>(3, 3, new T[]
+        return new(3, 3, new[]
         {
             T.Zero, -vector.At(2),vector.At(1),
             vector.At(2),T.Zero,-vector.At(0),

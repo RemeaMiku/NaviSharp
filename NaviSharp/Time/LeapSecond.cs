@@ -1,7 +1,7 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
-namespace NaviSharp;
+namespace NaviSharp.Time;
 
 internal static class LeapSecond
 {

@@ -4,7 +4,7 @@
 using System.Collections;
 using System.Numerics;
 
-namespace NaviSharp;
+namespace NaviSharp.LinearAlgebra;
 
 public enum MatrixVectorConstructMode
 {
@@ -192,7 +192,7 @@ public abstract class MatrixVectorBase<M, T> :
     #endregion Protected Fields
 
     #region Protected Methods
-
+    //TODO:改为ReadOnlySpan
     protected static void DoAdd(T[] left, int leftStart, T[] right, int rightStart, int length, T[] result, int resultStart)
     {
         var vectorSize = System.Numerics.Vector<T>.Count;

@@ -2,10 +2,12 @@
 //  Email:2020302142257@whu.edu.cn
 
 using System.Numerics;
+using NaviSharp.Orientation;
 
 namespace NaviSharp;
 
 public partial struct Quaternion<T> :
+    IOrientation,
     IMultiplyOperators<Quaternion<T>, Quaternion<T>, Quaternion<T>>,
     IAdditionOperators<Quaternion<T>, Quaternion<T>, Quaternion<T>>,
     ISubtractionOperators<Quaternion<T>, Quaternion<T>, Quaternion<T>>,
@@ -115,7 +117,7 @@ public partial struct Quaternion<T> :
         => new(-value.R, -value.IVector);
 
     public static Quaternion<T> operator *(Quaternion<T> left, Quaternion<T> right)
-        => new(left.R * right.R - left.IVector * right.IVector, left.R * right.IVector + right.R * left.IVector + left.IVector.OuterProduct(right.IVector));
+        => new(left.R * right.R - left.IVector * right.IVector, left.R * right.IVector + right.R * left.IVector + left.IVector.CrossProduct(right.IVector));
 
     public static Quaternion<T> operator *(Quaternion<T> left, T right)
             => new(left.R * right, left.IVector * right);
@@ -127,6 +129,42 @@ public partial struct Quaternion<T> :
 
     public override readonly string ToString()
         => $"[{R} {I} {J} {K}]";
+
+    public readonly EulerAngles ToEulerAngles()
+    {
+        if (this is Quaternion<double> q)
+        {
+            return OrientationConverter.ToEulerAngles(q);
+        }
+        throw new NotImplementedException();
+    }
+
+    public readonly RotationMatrix ToRotationMatrix()
+    {
+        if (this is Quaternion<double> q)
+        {
+            return OrientationConverter.ToRotationMatrix(q);
+        }
+        throw new NotImplementedException();
+    }
+
+    public readonly RotationVector ToRotationVector()
+    {
+        if (this is Quaternion<double> q)
+        {
+            return OrientationConverter.ToRotationVector(q);
+        }
+        throw new NotImplementedException();
+    }
+
+    public readonly Quaternion<double> ToQuaternion()
+    {
+        if (this is Quaternion<double> q)
+        {
+            return q;
+        }
+        throw new NotImplementedException();
+    }
 
     #endregion Public Methods
 }

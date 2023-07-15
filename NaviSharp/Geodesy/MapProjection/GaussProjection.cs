@@ -1,9 +1,10 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
-namespace NaviSharp;
+using NaviSharp.SpatialReference;
+namespace NaviSharp.Geodesy.MapProjection;
 
-public class GaussProjection
+public class GaussProjection : IMapProjection
 {
     #region Public Constructors
 
@@ -37,7 +38,7 @@ public class GaussProjection
 
     #region Public Methods
 
-    public (double X, double Y) FromEllipsoidToPlane(Angle latitude, Angle longitude)
+    public (double X, double Y) ToPlane(Angle latitude, Angle longitude)
     {
         var B = latitude.Radians;
         var sinB = Sin(B);
@@ -54,7 +55,7 @@ public class GaussProjection
         return (X, Y);
     }
 
-    public (Angle Latitude, Angle Longitude) FromPlaneToEllipsoid(double x, double y)
+    public (Angle Latitude, Angle Longitude) ToEllipsoid(double x, double y)
     {
         var e2_1 = _ellipsoid.E1 * _ellipsoid.E1;
         var B_f0 = x / (_ellipsoid.A * _a * (1 - e2_1));
