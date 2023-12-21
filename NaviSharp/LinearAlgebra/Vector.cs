@@ -138,10 +138,10 @@ public partial class Vector<T> :
 
     public static Vector<T> operator *(T left, Vector<T> right) => right * left;
 
-    public static Vector<T> Random(int dimension)
+    public static Vector<T> Random(int dimension, T min, T max)
     {
         var result = new Vector<T>(dimension);
-        result.AssignRandom();
+        result.AssignRandom(min, max);
         return result;
     }
 

@@ -4,6 +4,7 @@
 using System.Collections.Concurrent;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
 using System.Text;
 using NaviSharp.LinearAlgebra;
 
@@ -195,10 +196,10 @@ where T : struct, IFloatingPoint<T>
 
     public static Matrix<T> operator *(T left, Matrix<T> right) => right * left;
 
-    public static Matrix<T> Random(int row, int column)
+    public static Matrix<T> Random(int row, int column, T min, T max)
     {
         var result = new Matrix<T>(row, column);
-        result.AssignRandom();
+        result.AssignRandom(min, max);
         return result;
     }
 
@@ -418,6 +419,8 @@ where T : struct, IFloatingPoint<T>
         }
         else
         {
+            var v = new System.Numerics.Vector<double>();
+            var vv = v.AsVector256();
             for (int i = 0; i < leftRow; i++)
                 for (int k = 0; k < leftColumn; k++)
                     for (int j = 0; j < rightColumn; j++)
@@ -430,17 +433,17 @@ where T : struct, IFloatingPoint<T>
 
     #region Private Methods
 
-    private void RowMult(int i, T num)
-    {
-        DoMult(num, _data, i * ColumnCount, ColumnCount, _data, i * ColumnCount);
-    }
+    //private void RowMult(int i, T num)
+    //{
+    //    DoMult(num, _data, i * ColumnCount, ColumnCount, _data, i * ColumnCount);
+    //}
 
-    private void RowMultAdd(int i1, T num, int i2)
-    {
-        var temp = new T[ColumnCount];
-        DoMult(num, _data, i2 * ColumnCount, ColumnCount, temp, 0);
-        DoAdd(_data, i1 * ColumnCount, temp, 0, ColumnCount, _data, i1 * ColumnCount);
-    }
+    //private void RowMultAdd(int i1, T num, int i2)
+    //{
+    //    var temp = new T[ColumnCount];
+    //    DoMult(num, _data, i2 * ColumnCount, ColumnCount, temp, 0);
+    //    DoAdd(_data, i1 * ColumnCount, temp, 0, ColumnCount, _data, i1 * ColumnCount);
+    //}
 
     private void SwapRow(int i1, int i2)
     {

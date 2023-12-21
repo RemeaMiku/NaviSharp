@@ -193,97 +193,107 @@ public abstract class MatrixVectorBase<M, T> :
 
     #region Protected Methods
     //TODO:改为ReadOnlySpan
-    protected static void DoAdd(T[] left, int leftStart, T[] right, int rightStart, int length, T[] result, int resultStart)
+    protected static void DoAdd(ReadOnlySpan<T> left, ReadOnlySpan<T> right, Span<T> result)
     {
+        if (left.Length != right.Length)
+            throw new ArgumentException($"The length of left and right must be the same.");
+        var length = left.Length;
+        if (result.Length != length)
+            throw new ArgumentException("The result must be the same length as the input.");
         var vectorSize = System.Numerics.Vector<T>.Count;
-        int i;
-        for (i = 0; i <= length - vectorSize; i += vectorSize)
+        var i = 0;
+        for (; i <= length - vectorSize; i += vectorSize)
         {
-            var vector1 = new System.Numerics.Vector<T>(left, leftStart + i);
-            var vector2 = new System.Numerics.Vector<T>(right, rightStart + i);
-            (vector1 + vector2).CopyTo(result, resultStart + i);
+            var vector1 = new System.Numerics.Vector<T>(left[i..]);
+            var vector2 = new System.Numerics.Vector<T>(right[i..]);
+            (vector1 + vector2).CopyTo(result.Slice(i, vectorSize));
         }
         for (; i < length; i++)
-        {
-            result[resultStart + i] = left[leftStart + i] + right[rightStart + i];
-        }
+            result[i] = left[i] + right[i];
     }
 
-    protected static void DoAdd(T[] left, T[] right, T[] result)
-    {
-        DoAdd(left, 0, right, 0, left.Length, result, 0);
-    }
+    //protected static void DoAdd(ReadOnlySpan<T> left, ReadOnlySpan<T> right, T[] result)
+    //{
+    //    DoAdd(left, 0, right, 0, left.Length, result, 0);
+    //}
 
-    protected static T DoDot(T[] left, int leftStart, T[] right, int rightStart, int length)
+    protected static T DoDot(ReadOnlySpan<T> left, ReadOnlySpan<T> right)
     {
+        if (left.Length != right.Length)
+            throw new ArgumentException($"The length of left and right must be the same.");
+        var length = left.Length;
         var vectorSize = System.Numerics.Vector<T>.Count;
-        T result = T.Zero;
-        int i;
-        for (i = 0; i <= length - vectorSize; i += vectorSize)
+        var result = T.Zero;
+        var i = 0;
+        for (; i <= length - vectorSize; i += vectorSize)
         {
-            var vector1 = new System.Numerics.Vector<T>(left, leftStart + i);
-            var vector2 = new System.Numerics.Vector<T>(right, rightStart + i);
+            var vector1 = new System.Numerics.Vector<T>(left[i..]);
+            var vector2 = new System.Numerics.Vector<T>(right[i..]);
             result += Vector.Dot(vector1, vector2);
         }
         for (; i < length; i++)
-        {
-            result += left[leftStart + i] * right[rightStart + i];
-        }
+            result += left[i] * right[i];
         return result;
     }
 
-    protected static T DoDot(T[] left, T[] right)
-    {
-        return DoDot(left, 0, right, 0, left.Length);
-    }
+    //protected static T DoDot(T[] left, T[] right)
+    //{
+    //    return DoDot(left, 0, right, 0, left.Length);
+    //}
 
-    protected static void DoMult(T num, T[] nums, int numsStart, int length, T[] result, int resultStart)
+    protected static void DoMult(T num, ReadOnlySpan<T> nums, Span<T> result)
     {
+        var length = nums.Length;
+        if (result.Length != length)
+            throw new ArgumentException("The result must be the same length as the input.");
         var vectorSize = System.Numerics.Vector<T>.Count;
         int i;
         for (i = 0; i <= length - vectorSize; i += vectorSize)
         {
-            var vector = new System.Numerics.Vector<T>(nums, numsStart + i);
-            (num * vector).CopyTo(result, resultStart + i);
+            var vector = new System.Numerics.Vector<T>(nums[i..]);
+            (num * vector).CopyTo(result[i..]);
         }
         for (; i < length; i++)
-        {
-            result[resultStart + i] = num * nums[numsStart + i];
-        }
+            result[i] = num * nums[i];
     }
 
-    protected static void DoMult(T num, T[] nums, T[] result)
-    {
-        DoMult(num, nums, 0, nums.Length, result, 0);
-    }
+    //protected static void DoMult(T num, T[] nums, T[] result)
+    //{
+    //    DoMult(num, nums, 0, nums.Length, result, 0);
+    //}
 
-    protected static void DoSub(T[] left, int leftStart, T[] right, int rightStart, int length, T[] result, int resultStart)
+    protected static void DoSub(ReadOnlySpan<T> left, ReadOnlySpan<T> right, Span<T> result)
     {
+        if (left.Length != right.Length)
+            throw new ArgumentException($"The length of left and right must be the same.");
+        var length = left.Length;
+        if (result.Length != length)
+            throw new ArgumentException("The result must be the same length as the input.");
         var vectorSize = System.Numerics.Vector<T>.Count;
-        int i;
-        for (i = 0; i <= length - vectorSize; i += vectorSize)
+        var i = 0;
+        for (; i <= length - vectorSize; i += vectorSize)
         {
-            var vector1 = new System.Numerics.Vector<T>(left, leftStart + i);
-            var vector2 = new System.Numerics.Vector<T>(right, rightStart + i);
-            (vector1 - vector2).CopyTo(result, resultStart + i);
+            var vector1 = new System.Numerics.Vector<T>(left[i..]);
+            var vector2 = new System.Numerics.Vector<T>(right[i..]);
+            (vector1 - vector2).CopyTo(result.Slice(i, vectorSize));
         }
         for (; i < length; i++)
-        {
-            result[resultStart + i] = left[leftStart + i] - right[rightStart + i];
-        }
+            result[i] = left[i] + right[i];
     }
 
-    protected static void DoSub(T[] left, T[] right, T[] result)
-    {
-        DoSub(left, 0, right, 0, left.Length, result, 0);
-    }
+    //protected static void DoSub(T[] left, T[] right, T[] result)
+    //{
+    //    DoSub(left, 0, right, 0, left.Length, result, 0);
+    //}
 
-    protected void AssignRandom()
+    protected void AssignRandom(T min, T max)
     {
+        if (max < min)
+            throw new ArgumentException("The maximum cannot be less than the minimum.");
         var r = new Random();
         for (int i = 0; i < Count; i++)
         {
-            _data[i] = (T)(dynamic)r.Next(100);
+            _data[i] = min + (T)(dynamic)r.NextDouble() * (max - min);
         }
     }
 

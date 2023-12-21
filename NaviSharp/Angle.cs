@@ -4,8 +4,12 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Text.Json.Serialization;
+using NaviSharp.Serialization.Json;
 
 namespace NaviSharp;
+
+[JsonConverter(typeof(AngleJsonConverter))]
 [DebuggerDisplay("{Radians}rad | {Degrees}° | {DegreesMinutesSeconds.Degrees}°{DegreesMinutesSeconds.Minutes}′{DegreesMinutesSeconds.Seconds}″")]
 public partial struct Angle :
     IEquatable<Angle>,

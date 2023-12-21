@@ -2,12 +2,24 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Authors>Tianchen Zhou</Authors>
-    <Company>Wuhan University</Company>
+    <Authors>RemeaMiku</Authors>
+    <Company>Miraisoft</Company>
+    <Title>NaviSharp</Title>
+    <Version>1.0.1</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/RemeaMiku/NaviSharp</RepositoryUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>测绘、导航和地理类学科小型工具库，包含矩阵向量基本运算、ECEF和大地坐标转换、角度转换、姿态转换和地图投影等。未经过完整测试，不保证准确性。</Description>
+    <Copyright>Copyright © 2023 Miraisoft All rights reserved.</Copyright>
+    <PackageProjectUrl>https://github.com/RemeaMiku/NaviSharp</PackageProjectUrl>
+    <PackageTags>Navigation;GPS;GNSS;Geography;Surveying and mapping;Geodesy</PackageTags>
+    <PackageIcon>Miraisoft.png</PackageIcon>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\..\..\onedrive\Desktop\resources\Miraisoft.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="D:\RemeaMiku study\course in progress\dotnet\NaviSharp\NaviSharp\.editorconfig" />
   </ItemGroup>
 

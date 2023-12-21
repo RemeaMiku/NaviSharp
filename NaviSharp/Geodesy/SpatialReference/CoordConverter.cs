@@ -1,8 +1,6 @@
 ﻿// RemeaMiku(Wuhan University)
 //  Email:2020302142257@whu.edu.cn
 
-using System.Numerics;
-
 namespace NaviSharp.SpatialReference;
 
 public static class CoordConverter

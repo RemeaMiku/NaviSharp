@@ -3,9 +3,12 @@
 
 using System.Collections;
 using System.Numerics;
+using System.Text.Json.Serialization;
+using NaviSharp.Serialization.Json;
 
 namespace NaviSharp.SpatialReference;
 
+[JsonConverter(typeof(EcefCoordJsonConverter))]
 public readonly partial record struct EcefCoord :
     IEnumerable<double>,
     IFormattable,
@@ -14,35 +17,38 @@ public readonly partial record struct EcefCoord :
     ISubtractionOperators<EcefCoord, EcefCoord, Vector<double>>,
     IAdditionOperators<EcefCoord, Vector<double>, EcefCoord>
 {
-    private readonly double[] _data;
-    public readonly double X
+    private readonly double[] _data = new double[3];
+    public double X
     {
         get => _data[0];
         set => _data[0] = value;
     }
-    public readonly double Y
+    public double Y
     {
         get => _data[1];
         set => _data[1] = value;
     }
-    public readonly double Z
+    public double Z
     {
         get => _data[2];
         set => _data[2] = value;
     }
+
     public readonly double[] Data => _data;
     public readonly void Deconstruct(out double x, out double y, out double z)
     => (x, y, z) = (X, Y, Z);
     public EcefCoord(double x, double y, double z)
     {
-        _data = new double[] { x, y, z };
+        X = x;
+        Y = y;
+        Z = z;
     }
 
     public EcefCoord(Vector<double> vector)
     {
         if (!vector.IsSizeOf(3))
             throw new ArgumentException("The vector has to be 3-dimensional.");
-        _data = vector.Data;
+        Array.Copy(vector.Data, _data, 3);
     }
 
     public override readonly string ToString()

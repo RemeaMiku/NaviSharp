@@ -8,13 +8,13 @@ using NaviSharp.Orientation;
 namespace NaviSharp;
 
 [DebuggerDisplay("Yaw = {Yaw.Degrees}°, Pitch = {Pitch.Degrees}°, Roll = {Roll.Degrees}°")]
-public readonly partial record struct EulerAngles : IOrientation, IFormattable, IParsable<EulerAngles>
+public partial record struct EulerAngles : IOrientation, IFormattable, IParsable<EulerAngles>
 {
-    public Angle Yaw { get; init; }
+    public Angle Yaw { get; set; }
 
-    public Angle Pitch { get; init; }
+    public Angle Pitch { get; set; }
 
-    public Angle Roll { get; init; }
+    public Angle Roll { get; set; }
 
     public EulerAngles()
     {
@@ -39,7 +39,7 @@ public readonly partial record struct EulerAngles : IOrientation, IFormattable, 
         ValidateRange();
     }
 
-    private void ValidateRange()
+    private readonly void ValidateRange()
     {
         if (Yaw < ZeroAngle || Yaw >= RoundAngle)
             throw new ArgumentException($"{nameof(Yaw)} must be in the range of [-0°,360°)");
@@ -49,10 +49,10 @@ public readonly partial record struct EulerAngles : IOrientation, IFormattable, 
             throw new ArgumentException($"{nameof(Roll)} must be in the range of (-180°,180°]");
     }
 
-    public override string ToString()
+    public readonly override string ToString()
         => $"{Yaw:F3},{Pitch:F3},{Roll:F3}";
 
-    public string ToString(string? format, IFormatProvider? formatProvider = null)
+    public readonly string ToString(string? format, IFormatProvider? formatProvider = null)
     {
         if (format == null)
             return ToString();
@@ -94,14 +94,14 @@ public readonly partial record struct EulerAngles : IOrientation, IFormattable, 
         return true;
     }
 
-    public EulerAngles ToEulerAngles() => this;
+    public readonly EulerAngles ToEulerAngles() => this;
 
-    public RotationMatrix ToRotationMatrix()
+    public readonly RotationMatrix ToRotationMatrix()
         => OrientationConverter.ToRotationMatrix(this);
 
-    public RotationVector ToRotationVector()
+    public readonly RotationVector ToRotationVector()
         => OrientationConverter.ToRotationVector(ToQuaternion());
 
-    public Quaternion<double> ToQuaternion()
+    public readonly Quaternion<double> ToQuaternion()
         => OrientationConverter.ToQuaternion(this);
 }
